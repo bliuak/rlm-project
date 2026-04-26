@@ -3,142 +3,142 @@
     {
       "date": "2026-04-27",
       "user": 1000,
-      "record": "A depot has 18 containers, each with 5 modules. 0 modules fail inspection.\nDecision rule:\nIf usable modules are greater than 80, report the destination city: Kyoto.\nOtherwise, report the number of usable modules.\n\nQuestion: What should be reported?",
-      "correct_answer": "Kyoto",
-      "correct_category": "location"
+      "record": "A clinic receives 7 trays of vaccine vials. Each tray holds 12 vials, and 9 vials are marked expired.\n\nDecision rule:\nIf the number of usable vials is at least 70, report the health agency code: WHO.\nOtherwise, report the number of usable vials.\n\nQuestion: What should be reported?",
+      "correct_answer": "WHO",
+      "correct_category": "abbreviation"
     },
     {
       "date": "2026-11-04",
       "user": 1000,
-      "record": "A shuttle departs at 09:10 and arrives at 12:20.\n\nDecision rule:\nIf the trip duration is at least 170 minutes, report the transport code: IATA.\nOtherwise, report the arrival city: Valencia.\n\nQuestion: What should be reported?",
-      "correct_answer": "IATA",
-      "correct_category": "abbreviation"
+      "record": "A ferry leaves at 14:35 and arrives at 17:10 on the same day.\n\nDecision rule:\nIf the trip lasted more than 160 minutes, report the arrival city: Dubrovnik.\nOtherwise, report the trip duration in minutes.\n\nQuestion: What should be reported?",
+      "correct_answer": "155 minutes",
+      "correct_category": "numeric value"
     },
     {
       "date": "2010-05-15",
       "user": 1000,
-      "record": "Three review panels list these experts:\n- Panel A: Ada Lovelace, Niels Bohr, Katherine Johnson\n- Panel B: Katherine Johnson, Grace Hopper, Niels Bohr\n- Panel C: Niels Bohr, Dorothy Vaughan, Mary Jackson\n\nDecision rule:\nIf exactly one person appears on all three panels, report that person.\nOtherwise, report the concept \"classification conflict\".\n\nQuestion: What should be reported?",
-      "correct_answer": "Niels Bohr",
+      "record": "Three training rosters list instructors:\n- Roster A: Iris Okafor, Mateo Silva, Noor Haddad\n- Roster B: Iris Okafor, Elena Rossi, Noor Haddad\n- Roster C: Iris Okafor, Jonas Meyer, Priya Nair\n\nDecision rule:\nIf exactly one instructor appears on all three rosters, report that instructor.\nOtherwise, report the concept \"roster conflict\".\n\nQuestion: What should be reported?",
+      "correct_answer": "Iris Okafor",
       "correct_category": "human being"
     },
     {
       "date": "2010-11-22",
       "user": 1000,
-      "record": "A rover route is 43 kilometers long. The rover moves at a constant pace of 1 kilometer every 6 minutes.\n\nDecision rule:\nIf total travel time is more than 330 minutes, report the mission asset: Aurora Beacon.\nOtherwise, report the total travel time in minutes.\n\nQuestion: What should be reported?",
-      "correct_answer": "258 minutes",
-      "correct_category": "numeric value"
+      "record": "A lift can carry at most 1,100 kilograms. Three pallets are listed:\n- Pallet A: 1.2 metric tons\n- Pallet B: 950 kilograms\n- Pallet C: 1,150 kilograms\n\nDecision rule:\nFind the heaviest pallet that does not exceed the lift limit. If it is Pallet B, report the airport code: LAX. If it is Pallet C, report the harbor city: Bergen. Otherwise, report \"load mismatch\".\n\nQuestion: What should be reported?",
+      "correct_answer": "LAX",
+      "correct_category": "abbreviation"
     },
     {
       "date": "2011-06-01",
       "user": 1000,
-      "record": "Inventory table for one day:\n- bolts: 14\n- valves: 9\n- seals: 11\n\nDecision rule:\nIf the total item count is even, report the program code: UNDP.\nIf the total item count is odd, report \"resource bottleneck\".\n\nQuestion: What should be reported?",
-      "correct_answer": "UNDP",
-      "correct_category": "abbreviation"
+      "record": "Start from 2024-02-26. Move forward 4 days to reach a target date.\n\nDecision rule:\nIf the target date falls on a weekday, report the port city: Valparaiso.\nOtherwise, report the number of days moved forward.\n\nQuestion: What should be reported?",
+      "correct_answer": "Valparaiso",
+      "correct_category": "location"
     },
     {
       "date": "2011-12-09",
       "user": 1000,
-      "record": "Exam scores:\n- Lina Park: 73\n- Omar Diaz: 77\n- Ruth Kim: 70\n\nDecision rule:\nFind the highest score. If it is at least 78, report that person.\nOtherwise, report the fallback city: Tallinn.\n\nQuestion: What should be reported?",
-      "correct_answer": "Tallinn",
+      "record": "Routing notes:\nIf a crate is sealed, it receives a blue tag.\nIf a crate receives a blue tag, it is sent to the Reykjavik transfer station.\nThe crate is sealed.\n\nDecision rule:\nIf the transfer station can be concluded, report the transfer city: Reykjavik.\nOtherwise, report \"routing ambiguity\".\n\nQuestion: What should be reported?",
+      "correct_answer": "Reykjavik",
       "correct_category": "location"
     },
     {
       "date": "2012-06-17",
       "user": 1000,
-      "record": "Start from 2024-01-01. Move forward 5 days to reach a target date.\n\nDecision rule:\nIf the target date is on a weekend, report the code: HTML.\nOtherwise, report the number of days moved forward.\n\nQuestion: What should be reported?",
-      "correct_answer": "HTML",
-      "correct_category": "abbreviation"
+      "record": "A catering invoice has 18 adult meals at $14 each and 9 child meals at $8 each. A service credit subtracts $22 from the invoice.\n\nDecision rule:\nIf the final invoice is greater than $300, report the booked venue: Solaris Archive.\nOtherwise, report the final invoice total in dollars.\n\nQuestion: What should be reported?",
+      "correct_answer": "Solaris Archive",
+      "correct_category": "entity"
     },
     {
       "date": "2012-12-25",
       "user": 1000,
-      "record": "Logic notes:\nIf the tag is silver, the container is red.\nThe tag is not silver.\n\nDecision rule:\nIf you can conclude the container is red, report the vehicle name: Saturn V.\nOtherwise, report \"routing ambiguity\".\n\nQuestion: What should be reported?",
-      "correct_answer": "routing ambiguity",
-      "correct_category": "description and abstract concept"
+      "record": "Sprint results:\n- Amara Voss: 58.4 seconds\n- Tobias Ren: 57.9 seconds\n- Celia Duarte: 58.1 seconds\n\nDecision rule:\nFind the fastest runner. If the fastest time is below 58.0 seconds, report that runner.\nOtherwise, report the concept \"timing review\".\n\nQuestion: What should be reported?",
+      "correct_answer": "Tobias Ren",
+      "correct_category": "human being"
     },
     {
       "date": "2013-07-04",
       "user": 1000,
-      "record": "A buyer purchases 3 units at $18 each. A coupon subtracts $5 from the subtotal.\n\nDecision rule:\nIf the final total is below $80, report the final total in dollars.\nOtherwise, report the dispatch city: Nairobi.\n\nQuestion: What should be reported?",
-      "correct_answer": "$49",
-      "correct_category": "numeric value"
+      "record": "A lab thermometer reads 28 degrees Celsius. Convert the reading to Fahrenheit using F = C * 9/5 + 32.\n\nDecision rule:\nIf the Fahrenheit reading is above 80, report the standards code: UNESCO.\nOtherwise, report the storage city: Marrakesh.\n\nQuestion: What should be reported?",
+      "correct_answer": "UNESCO",
+      "correct_category": "abbreviation"
     },
     {
       "date": "2014-01-11",
       "user": 1000,
-      "record": "Sequence: 2, 5, 8, ...\nFind the next term assuming a constant difference.\n\nDecision rule:\nIf the next term is odd, report the contact person: Maya Chen.\nIf the next term is even, report the organization code: WHO.\n\nQuestion: What should be reported?",
-      "correct_answer": "Maya Chen",
-      "correct_category": "human being"
+      "record": "Sequence: 4, 9, 16, 25, ...\nFind the next term assuming the numbers continue as consecutive perfect squares.\n\nDecision rule:\nIf the next term is divisible by 3, report the next term.\nOtherwise, report the fallback city: Quito.\n\nQuestion: What should be reported?",
+      "correct_answer": "36",
+      "correct_category": "numeric value"
     },
     {
       "date": "2026-06-03",
       "user": 1001,
-      "record": "A depot has 12 containers, each with 6 modules. 3 modules fail inspection.\nDecision rule:\nIf usable modules are greater than 80, report the destination city: Kyoto.\nOtherwise, report the number of usable modules.\n\nQuestion: What should be reported?",
-      "correct_answer": "69",
-      "correct_category": "numeric value"
-    },
-    {
-      "date": "2026-12-11",
-      "user": 1001,
-      "record": "A shuttle departs at 10:15 and arrives at 13:40.\n\nDecision rule:\nIf the trip duration is at least 170 minutes, report the transport code: IATA.\nOtherwise, report the arrival city: Valencia.\n\nQuestion: What should be reported?",
-      "correct_answer": "IATA",
-      "correct_category": "abbreviation"
-    },
-    {
-      "date": "2010-06-21",
-      "user": 1001,
-      "record": "Three review panels list these experts:\n- Panel A: Ada Lovelace, Niels Bohr, Katherine Johnson\n- Panel B: Katherine Johnson, Grace Hopper, Niels Bohr\n- Panel C: Niels Bohr, Katherine Johnson, Mary Jackson\n\nDecision rule:\nIf exactly one person appears on all three panels, report that person.\nOtherwise, report the concept \"classification conflict\".\n\nQuestion: What should be reported?",
-      "correct_answer": "classification conflict",
-      "correct_category": "description and abstract concept"
-    },
-    {
-      "date": "2010-12-29",
-      "user": 1001,
-      "record": "A rover route is 46 kilometers long. The rover moves at a constant pace of 1 kilometer every 7 minutes.\n\nDecision rule:\nIf total travel time is more than 330 minutes, report the mission asset: Aurora Beacon.\nOtherwise, report the total travel time in minutes.\n\nQuestion: What should be reported?",
-      "correct_answer": "322 minutes",
-      "correct_category": "numeric value"
-    },
-    {
-      "date": "2011-07-08",
-      "user": 1001,
-      "record": "Inventory table for one day:\n- bolts: 15\n- valves: 10\n- seals: 12\n\nDecision rule:\nIf the total item count is even, report the program code: UNDP.\nIf the total item count is odd, report \"resource bottleneck\".\n\nQuestion: What should be reported?",
-      "correct_answer": "resource bottleneck",
-      "correct_category": "description and abstract concept"
-    },
-    {
-      "date": "2012-01-15",
-      "user": 1001,
-      "record": "Exam scores:\n- Lina Park: 74\n- Omar Diaz: 68\n- Ruth Kim: 73\n\nDecision rule:\nFind the highest score. If it is at least 78, report that person.\nOtherwise, report the fallback city: Tallinn.\n\nQuestion: What should be reported?",
-      "correct_answer": "Tallinn",
-      "correct_category": "location"
-    },
-    {
-      "date": "2012-07-24",
-      "user": 1001,
-      "record": "Start from 2024-01-01. Move forward 6 days to reach a target date.\n\nDecision rule:\nIf the target date is on a weekend, report the code: HTML.\nOtherwise, report the number of days moved forward.\n\nQuestion: What should be reported?",
+      "record": "A museum has 5 display cases. Each case can hold 14 artifacts, and 8 artifacts are temporarily on loan elsewhere.\n\nDecision rule:\nIf the number of displayable artifacts is less than 60, report the concept \"exhibit shortage\".\nOtherwise, report the archive format code: HTML.\n\nQuestion: What should be reported?",
       "correct_answer": "HTML",
       "correct_category": "abbreviation"
     },
     {
+      "date": "2026-12-11",
+      "user": 1001,
+      "record": "A support call begins at 22:45 and lasts 95 minutes.\n\nDecision rule:\nIf the call ends after midnight, report the service city: Innsbruck.\nOtherwise, report the call duration in minutes.\n\nQuestion: What should be reported?",
+      "correct_answer": "Innsbruck",
+      "correct_category": "location"
+    },
+    {
+      "date": "2010-06-21",
+      "user": 1001,
+      "record": "A subscription bill starts with a $45 base charge. It adds 3 premium modules at $7 each, then applies a $6 credit.\n\nDecision rule:\nIf the final bill is an even dollar amount, report the final bill in dollars.\nOtherwise, report the vehicle model: Orion Shuttle.\n\nQuestion: What should be reported?",
+      "correct_answer": "$60",
+      "correct_category": "numeric value"
+    },
+    {
+      "date": "2010-12-29",
+      "user": 1001,
+      "record": "Three project teams list required tools:\n- Team A: radar, lidar, sonar\n- Team B: lidar, sonar, GPS\n- Team C: lidar, sonar, thermal camera\n\nDecision rule:\nIf exactly one tool appears on all three teams, report the mission asset: Harbor Lens.\nOtherwise, report the concept \"tool overlap\".\n\nQuestion: What should be reported?",
+      "correct_answer": "tool overlap",
+      "correct_category": "description and abstract concept"
+    },
+    {
+      "date": "2011-07-08",
+      "user": 1001,
+      "record": "Trail guide distances:\n- North spur: 3.4 kilometers\n- East spur: 2,800 meters\n- West spur: 3,100 meters\n\nDecision rule:\nFind the shortest spur after converting all distances to kilometers. If it is the East spur, report the destination: Kigali. If it is the West spur, report the code: UNESCO. Otherwise, report the guide: Selene Park.\n\nQuestion: What should be reported?",
+      "correct_answer": "Kigali",
+      "correct_category": "location"
+    },
+    {
+      "date": "2012-01-15",
+      "user": 1001,
+      "record": "Start from 2021-09-29. Move forward 10 days to reach a target date.\n\nDecision rule:\nIf the target date falls on a Saturday, report the launch vehicle: Mercury Atlas.\nOtherwise, report the number of days moved forward.\n\nQuestion: What should be reported?",
+      "correct_answer": "Mercury Atlas",
+      "correct_category": "entity"
+    },
+    {
+      "date": "2012-07-24",
+      "user": 1001,
+      "record": "Signal rules:\nIf switch A is on, relay B becomes active.\nIf relay B is active, the beacon receives a signal.\nSwitch A is on.\n\nDecision rule:\nIf the beacon receives a signal, report the beacon name: Nimbus Relay.\nOtherwise, report the numeric status value: 0.\n\nQuestion: What should be reported?",
+      "correct_answer": "Nimbus Relay",
+      "correct_category": "entity"
+    },
+    {
       "date": "2013-01-31",
       "user": 1001,
-      "record": "Logic notes:\nIf the tag is silver, the container is red.\nThe tag is silver.\n\nDecision rule:\nIf you can conclude the container is red, report the vehicle name: Saturn V.\nOtherwise, report \"routing ambiguity\".\n\nQuestion: What should be reported?",
-      "correct_answer": "Saturn V",
-      "correct_category": "entity"
+      "record": "Invoice table:\n- Atlas invoice: due 2022-04-10\n- Northstar invoice: due 2022-04-08\n- Meridian invoice: due 2022-04-13\n\nDecision rule:\nFind the invoice with the earliest due date. If it is the Northstar invoice, report the vendor contact: Priya Nair. Otherwise, report the fallback city: Hobart.\n\nQuestion: What should be reported?",
+      "correct_answer": "Priya Nair",
+      "correct_category": "human being"
     },
     {
       "date": "2013-08-10",
       "user": 1001,
-      "record": "A buyer purchases 4 units at $19 each. A coupon subtracts $0 from the subtotal.\n\nDecision rule:\nIf the final total is below $80, report the final total in dollars.\nOtherwise, report the dispatch city: Nairobi.\n\nQuestion: What should be reported?",
-      "correct_answer": "$76",
-      "correct_category": "numeric value"
+      "record": "A survey records 48 yes votes out of 80 total responses.\n\nDecision rule:\nIf the yes share is at least 60%, report the concept \"majority approval\".\nOtherwise, report the rail code: SNCF.\n\nQuestion: What should be reported?",
+      "correct_answer": "majority approval",
+      "correct_category": "description and abstract concept"
     },
     {
       "date": "2014-02-17",
       "user": 1001,
-      "record": "Sequence: 2, 5, 8, ...\nFind the next term assuming a constant difference.\n\nDecision rule:\nIf the next term is odd, report the contact person: Maya Chen.\nIf the next term is even, report the organization code: WHO.\n\nQuestion: What should be reported?",
-      "correct_answer": "Maya Chen",
-      "correct_category": "human being"
+      "record": "A drone flies 2.5 kilometers east, then 750 meters west, then 1.25 kilometers east.\n\nDecision rule:\nIf the net eastward distance is exactly 3 kilometers, report the net distance as \"3 kilometers\".\nOtherwise, report the destination city: Sapporo.\n\nQuestion: What should be reported?",
+      "correct_answer": "3 kilometers",
+      "correct_category": "numeric value"
     },
     {
       "date": "2026-07-10",
