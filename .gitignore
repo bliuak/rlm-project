@@ -1,1 +1,7 @@
 .env
+results/
+logs/
+.hf-cache/
+.python-deps/
+__pycache__/
+*.pyc

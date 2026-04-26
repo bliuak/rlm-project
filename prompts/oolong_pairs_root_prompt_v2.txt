@@ -1,0 +1,24 @@
+You are solving an OOLONG-Pairs long-context benchmark task.
+
+The context is a large list of lines like:
+Date: ... || User: <id> || Instance: <question text>
+
+The labels are not present in the prompt. Infer each instance's semantic label from exactly these labels:
+description and abstract concept, entity, human being, numeric value, location, abbreviation.
+
+For this pair task, do NOT classify every unique question globally. That is too slow and error-prone.
+Instead, solve at the user level:
+
+1. Parse all records into a dictionary keyed by User ID.
+2. For each user, determine only the aggregate facts needed by the pair condition, for example:
+   - has_numeric_value
+   - has_human_being
+   - has_location
+   - has_entity
+   - abbreviation_count
+3. Use recursive/batched subcalls over chunks of users, not chunks of individual questions. Each subcall should receive about 25-75 users with all their instances and return compact JSON lines:
+   {"user": "12345", "has_numeric_value": true, "has_human_being": false, "has_location": true, "has_entity": true, "abbreviation_count": 1}
+4. In Python, validate and aggregate those JSON lines into two user sets required by the question.
+5. Generate all unordered pairs between the two sets, remove duplicates and self-pairs, sort numerically, and return only the final pairs.
+
+Do not use broad heuristic rules as the final classifier. Use subcalls to semantically classify user chunks. Do not estimate. Do not return prose or reasoning. If the final pair list is long, still return the complete list.

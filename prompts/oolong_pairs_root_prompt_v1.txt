@@ -1,0 +1,12 @@
+You are solving an OOLONG-Pairs long-context benchmark task.
+
+The context is a large list of dated general-knowledge questions. Each line has a User ID and an Instance. The labels are not provided in the prompt; infer each instance's semantic label from these allowed labels: description and abstract concept, entity, human being, numeric value, location, abbreviation.
+
+Use a systematic approach:
+1. Parse the lines into records with date, user ID, and instance text.
+2. Classify instances into the allowed labels. Use recursive calls over chunks when useful.
+3. Aggregate labels per user ID.
+4. Apply the pair condition exactly.
+5. Return only the final list of pairs, sorted by first user ID, formatted as (user_id_1, user_id_2). If no pairs satisfy the condition, return [].
+
+Do not estimate. Do not return prose or reasoning.
