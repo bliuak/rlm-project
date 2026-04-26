@@ -34,13 +34,29 @@ Check dataset access without spending model calls:
 python benchmark_tests/oolong_pairs_rlm.py --limit 1 --dry-run
 ```
 
-Edit the RLM root/system prompt in `prompts/oolong_root_prompt.txt`, then run:
+Edit the task-level root prompt in `prompts/oolong_root_prompt.txt`, then run:
 
 ```bash
 python benchmark_tests/oolong_pairs_rlm.py \
   --limit 5 \
   --root-prompt-file prompts/oolong_root_prompt.txt
 ```
+
+To test a generic RLM control prompt derived from the package's original system prompt, use `--custom-system-prompt-file` instead:
+
+```bash
+python benchmark_tests/oolong_pairs_rlm.py \
+  --source pairs \
+  --pair-query paper_20 \
+  --limit 1 \
+  --max-depth 2 \
+  --custom-system-prompt-file prompts/rlm_system_prompt_depth2_v3.txt \
+  --log-dir logs/depth2_v3
+```
+
+`--root-prompt-file` is a task hint passed with each query. `--custom-system-prompt-file` replaces the RLM's generic REPL/controller policy, including when it should use `llm_query`, `llm_query_batched`, `rlm_query`, and `rlm_query_batched`. The `prompts/rlm_system_prompt_depth2_v*.txt` files are intentionally not OOLONG-specific; they are meant to improve depth-2 recursive planning and aggregation across tasks.
+
+See `prompts/rlm_system_prompt_iteration_notes.md` for the trajectory issues that motivated the latest generic system prompt.
 
 By default this uses:
 

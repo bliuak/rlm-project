@@ -162,10 +162,12 @@ def score_task(task: OolongTask, actual: str) -> float:
     return score_answer(task.expected_answer, actual, task.answer_type)
 
 
-def clean_model_answer(answer: str) -> str:
+def clean_model_answer(answer: str, answer_type: AnswerType) -> str:
     answer = answer.strip()
     answer = re.sub(r"^answer\s*:\s*", "", answer, flags=re.IGNORECASE)
     non_empty_lines = [line.strip() for line in answer.splitlines() if line.strip()]
+    if answer_type == AnswerType.PAIRS:
+        return "\n".join(non_empty_lines) if non_empty_lines else answer
     return non_empty_lines[0] if non_empty_lines else answer
 
 
@@ -585,7 +587,7 @@ def run_benchmark(args: argparse.Namespace) -> list[dict[str, Any]]:
                     build_completion_payload(task, args.structured_prompt),
                     root_prompt=root_prompt,
                 )
-                actual_answer = clean_model_answer(completion.response)
+                actual_answer = clean_model_answer(completion.response, task.answer_type)
             except Exception as exc:  # Keep long runs moving and record the failed task.
                 error = str(exc)
 
@@ -683,12 +685,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--root-prompt-file",
         type=Path,
-        help="Read the RLM root/system prompt from a text file.",
+        help="Read a per-query root prompt from a text file.",
     )
     parser.add_argument(
         "--custom-system-prompt-file",
         type=Path,
-        help="Override the internal RLM system prompt from a text file.",
+        help="Override the generic internal RLM control prompt from a text file.",
     )
     parser.add_argument(
         "--log-dir",
