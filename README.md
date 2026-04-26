@@ -6,6 +6,16 @@ pip install -r requirements.txt
 
 Add a `.env` file to the repo root with any model provider keys your RLM backend needs.
 
+For OpenRouter-backed runs, add:
+
+```env
+OPENROUTER_API_KEY=sk-or-v1-your-key-here
+```
+
+RLM has a first-class `openrouter` backend. The 500k benchmark runner hardcodes
+the backend/model near the top of `benchmark_tests/run_rlm_benchmark_tasks.py`;
+edit `BENCHMARK_MODEL_NAME` there if you want a different model.
+
 ## HuggingFace
 
 Some benchmark datasets require Hugging Face access.
@@ -114,3 +124,27 @@ python benchmark_tests/oolong_pairs_rlm.py \
 Token counts use `tiktoken` with the `cl100k_base` encoding by default. Override this with `--tokenizer` if you want a different installed `tiktoken` encoding.
 
 The runner writes one JSON object per task with the task metadata, expected answer, RLM answer, latency, score, and any error. Scoring follows the oolong-pairs conventions: exact match for labels/dates, `0.75^abs(error)` for numeric answers, and normalized `more`/`less`/`same` matching for comparisons.
+
+## OOLONG-Pairs 500k Tasks
+
+Generate local 500k-token OOLONG-Pairs-style tasks:
+
+```bash
+python benchmark_tests/generate_oolong_pairs_500k.py
+```
+
+Run RLM on those tasks:
+
+```bash
+python benchmark_tests/run_rlm_benchmark_tasks.py \
+  --tasks results/oolong_pairs_500k_tasks.jsonl \
+  --output results/oolong_pairs_500k_rlm_results.jsonl \
+  --limit 1
+```
+
+Use a model with a context window larger than the benchmark context size.
+
+## Trajectory Viewer
+
+Open `trajectory_viewer/index.html` in a browser, then drop one of the JSONL
+files from `logs/` into the viewer.

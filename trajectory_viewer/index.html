@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RLM Trajectory Viewer</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7f9;
+        --panel: #ffffff;
+        --panel-2: #eef4f2;
+        --ink: #17211f;
+        --muted: #60706b;
+        --line: #d8e0dd;
+        --accent: #0f766e;
+        --accent-2: #9a3412;
+        --danger: #b42318;
+        --code-bg: #111827;
+        --code-ink: #f9fafb;
+        --shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      .app {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+      }
+
+      aside {
+        background: #17211f;
+        color: #f8faf9;
+        padding: 22px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: auto;
+      }
+
+      main {
+        padding: 24px;
+        min-width: 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        font-size: 24px;
+        line-height: 1.1;
+      }
+
+      h2 {
+        font-size: 19px;
+      }
+
+      h3 {
+        font-size: 15px;
+      }
+
+      .subtle {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      aside .subtle {
+        color: #b7c5c0;
+      }
+
+      .drop-zone {
+        margin-top: 20px;
+        border: 1px dashed rgba(255, 255, 255, 0.38);
+        border-radius: 8px;
+        padding: 18px;
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .drop-zone.dragging {
+        border-color: #5eead4;
+        background: rgba(20, 184, 166, 0.16);
+      }
+
+      .file-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .file-input {
+        width: 100%;
+        color: #f8faf9;
+      }
+
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 18px;
+      }
+
+      .pill {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      aside .pill {
+        border-color: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.08);
+        color: #e5eeee;
+      }
+
+      .nav-list {
+        margin-top: 22px;
+        display: grid;
+        gap: 8px;
+      }
+
+      .nav-item {
+        width: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.06);
+        color: #f8faf9;
+        text-align: left;
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        border-color: #5eead4;
+        background: rgba(20, 184, 166, 0.17);
+      }
+
+      .nav-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: baseline;
+      }
+
+      .nav-label {
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .nav-time {
+        color: #b7c5c0;
+        font-size: 12px;
+      }
+
+      .nav-preview {
+        margin-top: 5px;
+        color: #d6e2df;
+        font-size: 12px;
+        line-height: 1.3;
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 18px;
+      }
+
+      .control-group {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .search {
+        min-width: min(420px, 100%);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+        background: #fff;
+      }
+
+      .button {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        color: var(--ink);
+        padding: 9px 12px;
+        cursor: pointer;
+      }
+
+      .button:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .button.primary {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .stat {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 14px;
+        box-shadow: var(--shadow);
+        min-width: 0;
+      }
+
+      .stat-value {
+        font-size: 22px;
+        font-weight: 800;
+        overflow-wrap: anywhere;
+      }
+
+      .stat-label {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 4px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        margin-bottom: 14px;
+        overflow: hidden;
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--line);
+        background: #fbfcfc;
+      }
+
+      .panel-body {
+        padding: 16px;
+      }
+
+      .iteration {
+        scroll-margin-top: 20px;
+      }
+
+      .section-tabs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+
+      .tab {
+        border: 1px solid var(--line);
+        background: var(--panel-2);
+        border-radius: 8px;
+        padding: 7px 10px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+
+      .tab.active {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+
+      details {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        margin-top: 10px;
+      }
+
+      summary {
+        cursor: pointer;
+        padding: 10px 12px;
+        color: var(--ink);
+        font-weight: 700;
+      }
+
+      .details-body {
+        border-top: 1px solid var(--line);
+        padding: 12px;
+      }
+
+      pre {
+        margin: 0;
+        padding: 12px;
+        overflow: auto;
+        max-height: 520px;
+        background: var(--code-bg);
+        color: var(--code-ink);
+        border-radius: 8px;
+        font-family:
+          "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        font-size: 12px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+
+      .text-block {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        line-height: 1.5;
+        max-height: 520px;
+        overflow: auto;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        padding: 12px;
+        background: #fbfcfc;
+      }
+
+      .empty {
+        border: 1px dashed var(--line);
+        border-radius: 8px;
+        padding: 28px;
+        text-align: center;
+        color: var(--muted);
+        background: #fff;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        border-radius: 999px;
+        padding: 3px 8px;
+        background: var(--panel-2);
+        color: var(--muted);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .badge.final {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .badge.error {
+        background: #fee2e2;
+        color: var(--danger);
+      }
+
+      .kv {
+        display: grid;
+        grid-template-columns: minmax(120px, 210px) minmax(0, 1fr);
+        gap: 8px 12px;
+        font-size: 13px;
+      }
+
+      .kv-key {
+        color: var(--muted);
+      }
+
+      .kv-value {
+        overflow-wrap: anywhere;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      mark {
+        background: #fde68a;
+        padding: 0 2px;
+      }
+
+      @media (max-width: 960px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        aside {
+          position: static;
+          height: auto;
+        }
+
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 600px) {
+        main {
+          padding: 16px;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside>
+        <h1>RLM Trajectory Viewer</h1>
+        <p class="subtle">
+          Drop a trajectory JSONL file from <code>logs/...</code>, or choose one
+          with the file picker.
+        </p>
+        <section id="dropZone" class="drop-zone">
+          <strong>Load Trajectory</strong>
+          <p class="subtle">
+            Supports RLM logger JSONL files with metadata and iteration rows.
+          </p>
+          <div class="file-row">
+            <input id="fileInput" class="file-input" type="file" accept=".jsonl,.json" />
+          </div>
+        </section>
+        <div id="fileMeta" class="pill-row"></div>
+        <nav id="iterationNav" class="nav-list" aria-label="Iterations"></nav>
+      </aside>
+
+      <main>
+        <div class="toolbar">
+          <div>
+            <h2 id="title">No trajectory loaded</h2>
+            <p id="subtitle" class="subtle">
+              Open a JSONL trajectory to inspect the run.
+            </p>
+          </div>
+          <div class="control-group">
+            <input
+              id="searchInput"
+              class="search"
+              type="search"
+              placeholder="Search responses, code, output..."
+              disabled
+            />
+            <button id="expandAll" class="button" type="button" disabled>
+              Expand
+            </button>
+            <button id="collapseAll" class="button" type="button" disabled>
+              Collapse
+            </button>
+          </div>
+        </div>
+
+        <section class="grid" id="stats"></section>
+        <section id="metadataPanel"></section>
+        <section id="content">
+          <div class="empty">
+            Choose an RLM trajectory JSONL file to visualize iterations, code
+            execution, nested calls, and final answers.
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const state = {
+        metadata: null,
+        iterations: [],
+        iterationById: new Map(),
+        fileName: "",
+        query: "",
+      };
+
+      const els = {
+        fileInput: document.getElementById("fileInput"),
+        dropZone: document.getElementById("dropZone"),
+        fileMeta: document.getElementById("fileMeta"),
+        iterationNav: document.getElementById("iterationNav"),
+        title: document.getElementById("title"),
+        subtitle: document.getElementById("subtitle"),
+        stats: document.getElementById("stats"),
+        metadataPanel: document.getElementById("metadataPanel"),
+        content: document.getElementById("content"),
+        searchInput: document.getElementById("searchInput"),
+        expandAll: document.getElementById("expandAll"),
+        collapseAll: document.getElementById("collapseAll"),
+      };
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function compactText(value, max = 220) {
+        const text = String(value ?? "").replace(/\s+/g, " ").trim();
+        return text.length > max ? `${text.slice(0, max)}...` : text;
+      }
+
+      function formatNumber(value) {
+        if (value === null || value === undefined || value === "") return "—";
+        if (typeof value === "number") return value.toLocaleString();
+        return String(value);
+      }
+
+      function formatDuration(seconds) {
+        if (!Number.isFinite(seconds)) return "—";
+        if (seconds < 1) return `${Math.round(seconds * 1000)} ms`;
+        if (seconds < 90) return `${seconds.toFixed(1)} s`;
+        return `${(seconds / 60).toFixed(1)} min`;
+      }
+
+      function stringify(value) {
+        if (typeof value === "string") return value;
+        return JSON.stringify(value, null, 2);
+      }
+
+      function getPromptText(prompt) {
+        if (Array.isArray(prompt)) {
+          return prompt.map((item) => `${item.role || "message"}: ${item.content || ""}`).join("\n\n");
+        }
+        return stringify(prompt);
+      }
+
+      function stat(label, value) {
+        return `<div class="stat"><div class="stat-value">${escapeHtml(value)}</div><div class="stat-label">${escapeHtml(label)}</div></div>`;
+      }
+
+      function parseJsonl(text) {
+        const rows = [];
+        const errors = [];
+        text.split(/\r?\n/).forEach((line, index) => {
+          const trimmed = line.trim();
+          if (!trimmed) return;
+          try {
+            rows.push(JSON.parse(trimmed));
+          } catch (error) {
+            errors.push(`Line ${index + 1}: ${error.message}`);
+          }
+        });
+        if (errors.length) {
+          throw new Error(errors.slice(0, 5).join("\n"));
+        }
+        return rows;
+      }
+
+      function loadRows(rows, fileName) {
+        state.fileName = fileName;
+        state.metadata = rows.find((row) => row.type === "metadata") || null;
+        state.iterations = rows.filter((row) => row.type === "iteration");
+        state.iterationById = new Map(
+          state.iterations.map((iteration) => [String(iteration.iteration), iteration]),
+        );
+        state.query = "";
+        render();
+      }
+
+      async function loadFile(file) {
+        const text = await file.text();
+        const rows = parseJsonl(text);
+        loadRows(rows, file.name);
+      }
+
+      function render() {
+        els.title.textContent = state.fileName || "Trajectory";
+        els.subtitle.textContent = state.metadata
+          ? `${state.metadata.backend || "backend"} · ${state.metadata.root_model || "model"}`
+          : "Loaded trajectory";
+        els.searchInput.disabled = state.iterations.length === 0;
+        els.expandAll.disabled = state.iterations.length === 0;
+        els.collapseAll.disabled = state.iterations.length === 0;
+
+        renderFileMeta();
+        renderStats();
+        renderMetadata();
+        renderNav();
+        renderIterations();
+        applySearch();
+      }
+
+      function renderFileMeta() {
+        const meta = state.metadata || {};
+        const finalCount = state.iterations.filter((it) => it.final_answer).length;
+        els.fileMeta.innerHTML = [
+          `<span class="pill">${escapeHtml(state.fileName || "No file")}</span>`,
+          `<span class="pill">${state.iterations.length} iterations</span>`,
+          `<span class="pill">${finalCount} final markers</span>`,
+          meta.max_depth !== undefined ? `<span class="pill">depth ${escapeHtml(meta.max_depth)}</span>` : "",
+        ].join("");
+      }
+
+      function renderStats() {
+        const meta = state.metadata || {};
+        const iterationSeconds = state.iterations.reduce(
+          (sum, it) => sum + (Number(it.iteration_time) || 0),
+          0,
+        );
+        const codeBlocks = state.iterations.reduce(
+          (sum, it) => sum + ((it.code_blocks || []).length),
+          0,
+        );
+        const nestedCalls = state.iterations.reduce((sum, it) => {
+          return sum + (it.code_blocks || []).reduce((inner, block) => {
+            return inner + countNestedCalls((block.result || {}).rlm_calls || []);
+          }, 0);
+        }, 0);
+
+        els.stats.innerHTML = [
+          stat("Root Model", meta.root_model || "—"),
+          stat("Iterations", state.iterations.length),
+          stat("Code Blocks", codeBlocks),
+          stat("Nested Calls", nestedCalls),
+          stat("Backend", meta.backend || "—"),
+          stat("Max Depth", meta.max_depth ?? "—"),
+          stat("Max Iterations", meta.max_iterations ?? "—"),
+          stat("Iteration Time", formatDuration(iterationSeconds)),
+        ].join("");
+      }
+
+      function renderMetadata() {
+        if (!state.metadata) {
+          els.metadataPanel.innerHTML = "";
+          return;
+        }
+        const meta = state.metadata;
+        const entries = Object.entries(meta).filter(([key]) => key !== "type");
+        els.metadataPanel.innerHTML = `
+          <section class="panel">
+            <div class="panel-header">
+              <h3>Run Metadata</h3>
+              <span class="badge">${escapeHtml(meta.timestamp || "")}</span>
+            </div>
+            <div class="panel-body">
+              <div class="kv">
+                ${entries
+                  .map(([key, value]) => `
+                    <div class="kv-key">${escapeHtml(key)}</div>
+                    <div class="kv-value">${escapeHtml(
+                      typeof value === "object" ? JSON.stringify(value) : value,
+                    )}</div>
+                  `)
+                  .join("")}
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      function renderNav() {
+        els.iterationNav.innerHTML = state.iterations
+          .map((iteration) => {
+            const hasFinal = Boolean(iteration.final_answer);
+            const hasError = (iteration.code_blocks || []).some(
+              (block) => (block.result || {}).stderr,
+            );
+            return `
+              <button class="nav-item" type="button" data-target="iteration-${iteration.iteration}">
+                <div class="nav-top">
+                  <span class="nav-label">Iteration ${iteration.iteration}</span>
+                  <span class="nav-time">${escapeHtml(formatDuration(Number(iteration.iteration_time)))}</span>
+                </div>
+                <div class="nav-preview">
+                  ${hasFinal ? "Final answer · " : ""}${hasError ? "Error · " : ""}${escapeHtml(compactText(iteration.response, 120))}
+                </div>
+              </button>
+            `;
+          })
+          .join("");
+
+        els.iterationNav.querySelectorAll(".nav-item").forEach((button) => {
+          button.addEventListener("click", () => {
+            const target = document.getElementById(button.dataset.target);
+            target?.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+        });
+      }
+
+      function renderIterations() {
+        if (!state.iterations.length) {
+          els.content.innerHTML = `<div class="empty">No iteration rows found in this file.</div>`;
+          return;
+        }
+
+        els.content.innerHTML = state.iterations.map(renderIteration).join("");
+        els.content.querySelectorAll("[data-panel-tab]").forEach((button) => {
+          button.addEventListener("click", () => activateTab(button));
+        });
+        els.content.querySelectorAll("[data-render-section]").forEach((button) => {
+          button.addEventListener("click", () => renderLazySection(button.dataset.renderSection));
+        });
+        els.content.querySelectorAll("[data-copy]").forEach((button) => {
+          button.addEventListener("click", async () => {
+            if (button.dataset.renderFirst) {
+              renderLazySection(button.dataset.renderFirst);
+            }
+            const target = document.getElementById(button.dataset.copy);
+            await navigator.clipboard.writeText(target?.textContent || "");
+            button.textContent = "Copied";
+            setTimeout(() => (button.textContent = "Copy"), 1200);
+          });
+        });
+      }
+
+      function renderIteration(iteration) {
+        const blocks = iteration.code_blocks || [];
+        const promptId = `prompt-${iteration.iteration}`;
+        const responseId = `response-${iteration.iteration}`;
+        const codeId = `code-${iteration.iteration}`;
+        const final = iteration.final_answer;
+        const hasError = blocks.some((block) => (block.result || {}).stderr);
+        return `
+          <article class="panel iteration" id="iteration-${iteration.iteration}" data-search-text="${escapeHtml(
+            [
+              compactText(getPromptText(iteration.prompt), 2000),
+              iteration.response,
+              final,
+              ...blocks.flatMap((block) => [
+                compactText(block.code, 2000),
+                compactText(block.result?.stdout, 2000),
+                compactText(block.result?.stderr, 2000),
+                block.result?.final_answer,
+              ]),
+            ].join("\n").toLowerCase(),
+        )}">
+            <div class="panel-header">
+              <div>
+                <h3>Iteration ${iteration.iteration}</h3>
+                <p class="subtle">${escapeHtml(iteration.timestamp || "")}</p>
+              </div>
+              <div class="control-group">
+                <span class="badge">${escapeHtml(formatDuration(Number(iteration.iteration_time)))}</span>
+                ${final ? `<span class="badge final">Final</span>` : ""}
+                ${hasError ? `<span class="badge error">stderr</span>` : ""}
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="section-tabs">
+                <button class="tab active" data-panel-tab="${promptId}" type="button">Prompt</button>
+                <button class="tab" data-panel-tab="${responseId}" type="button">Response</button>
+                <button class="tab" data-panel-tab="${codeId}" type="button">Code (${blocks.length})</button>
+              </div>
+              <section id="${promptId}" class="tab-panel">
+                <div class="control-group" style="margin-bottom: 10px">
+                  <button class="button primary" type="button" data-render-section="${promptId}-text">Render Full Prompt</button>
+                  <button class="button" type="button" data-copy="${promptId}-text" data-render-first="${promptId}-text">Copy</button>
+                </div>
+                <div class="text-block">${escapeHtml(compactText(getPromptText(iteration.prompt), 1200))}</div>
+                <pre id="${promptId}-text" class="hidden" data-lazy-kind="prompt" data-iteration="${iteration.iteration}"></pre>
+              </section>
+              <section id="${responseId}" class="tab-panel hidden">
+                <div class="control-group" style="margin-bottom: 10px">
+                  <button class="button" type="button" data-copy="${responseId}-text">Copy</button>
+                </div>
+                <div id="${responseId}-text" class="text-block">${escapeHtml(iteration.response || "")}</div>
+                ${final ? `<details open><summary>Final Answer</summary><div class="details-body"><pre>${escapeHtml(final)}</pre></div></details>` : ""}
+              </section>
+              <section id="${codeId}" class="tab-panel hidden">
+                ${blocks.length ? blocks.map((block, index) => renderCodeBlock(block, iteration.iteration, index)).join("") : `<div class="empty">No code blocks in this iteration.</div>`}
+              </section>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderCodeBlock(block, iterationNumber, index) {
+        const result = block.result || {};
+        const blockId = `code-${iterationNumber}-${index}`;
+        const nestedCalls = result.rlm_calls || [];
+        return `
+          <details open>
+            <summary>Code Block ${index + 1} · ${escapeHtml(formatDuration(Number(result.execution_time)))}</summary>
+            <div class="details-body">
+              <h3>Code</h3>
+              <div class="control-group" style="margin: 8px 0 10px">
+                <button class="button primary" type="button" data-render-section="${blockId}-source">Render Full Code</button>
+              </div>
+              <div class="text-block">${escapeHtml(compactText(block.code || "", 1200))}</div>
+              <pre id="${blockId}-source" class="hidden" data-lazy-kind="code" data-iteration="${iterationNumber}" data-block-index="${index}"></pre>
+              ${result.stdout ? `<h3 style="margin-top: 14px">stdout</h3><pre>${escapeHtml(result.stdout)}</pre>` : ""}
+              ${result.stderr ? `<h3 style="margin-top: 14px">stderr</h3><pre>${escapeHtml(result.stderr)}</pre>` : ""}
+              ${result.final_answer ? `<h3 style="margin-top: 14px">Final From REPL</h3><pre>${escapeHtml(result.final_answer)}</pre>` : ""}
+              ${result.locals ? `<details><summary>Locals</summary><div class="details-body"><pre>${escapeHtml(JSON.stringify(result.locals, null, 2))}</pre></div></details>` : ""}
+              ${nestedCalls.length ? `<details><summary>Subcalls (${countNestedCalls(nestedCalls)})</summary><div class="details-body">${nestedCalls.map((call, callIndex) => renderNestedCall(call, `${iterationNumber}-${index}-${callIndex}`, 1)).join("")}</div></details>` : ""}
+            </div>
+          </details>
+        `;
+      }
+
+      function countNestedCalls(calls) {
+        return (calls || []).reduce((total, call) => {
+          const childIterations = call?.metadata?.iterations || [];
+          const childCalls = childIterations.flatMap((iteration) => {
+            return (iteration.code_blocks || []).flatMap((block) => {
+              return (block.result || {}).rlm_calls || [];
+            });
+          });
+          return total + 1 + countNestedCalls(childCalls);
+        }, 0);
+      }
+
+      function renderNestedCall(call, path, depth) {
+        const childIterations = call?.metadata?.iterations || [];
+        const childMetadata = call?.metadata?.run_metadata;
+        const callKind = childIterations.length || childMetadata ? "recursive RLM" : "plain LM";
+        return `
+          <details>
+            <summary>Depth ${depth} · ${callKind} · ${escapeHtml(call.root_model || "subcall")} · ${escapeHtml(formatDuration(Number(call.execution_time)))}</summary>
+            <div class="details-body">
+              ${childMetadata ? `<div class="pill-row" style="margin-top: 0; margin-bottom: 12px">
+                <span class="pill">${escapeHtml(childMetadata.backend || "backend")}</span>
+                <span class="pill">${escapeHtml(childMetadata.root_model || call.root_model || "model")}</span>
+                <span class="pill">${childIterations.length} child iterations</span>
+              </div>` : ""}
+              <h3>Prompt</h3>
+              <pre>${escapeHtml(stringify(call.prompt))}</pre>
+              <h3 style="margin-top: 14px">Response</h3>
+              <pre>${escapeHtml(call.response || "")}</pre>
+              ${call.usage_summary ? `<h3 style="margin-top: 14px">Usage</h3><pre>${escapeHtml(JSON.stringify(call.usage_summary, null, 2))}</pre>` : ""}
+              ${childIterations.length ? `<details open><summary>Child Trajectory (${childIterations.length})</summary><div class="details-body">${childIterations.map((iteration, index) => renderChildIteration(iteration, `${path}-${index}`, depth + 1)).join("")}</div></details>` : ""}
+            </div>
+          </details>
+        `;
+      }
+
+      function renderChildIteration(iteration, path, depth) {
+        const blocks = iteration.code_blocks || [];
+        const childCalls = blocks.flatMap((block) => (block.result || {}).rlm_calls || []);
+        const hasError = blocks.some((block) => (block.result || {}).stderr);
+        return `
+          <details>
+            <summary>
+              Iteration ${escapeHtml(iteration.iteration || path)}
+              · ${escapeHtml(formatDuration(Number(iteration.iteration_time)))}
+              ${iteration.final_answer ? "· final" : ""}
+              ${hasError ? "· stderr" : ""}
+            </summary>
+            <div class="details-body">
+              <h3>Response</h3>
+              <pre>${escapeHtml(iteration.response || "")}</pre>
+              ${iteration.final_answer ? `<h3 style="margin-top: 14px">Final Answer</h3><pre>${escapeHtml(iteration.final_answer)}</pre>` : ""}
+              ${blocks.length ? `<details><summary>Code Blocks (${blocks.length})</summary><div class="details-body">${blocks.map((block, index) => renderChildCodeBlock(block, `${path}-${index}`, depth)).join("")}</div></details>` : ""}
+              ${childCalls.length ? `<details><summary>Subcalls (${countNestedCalls(childCalls)})</summary><div class="details-body">${childCalls.map((call, index) => renderNestedCall(call, `${path}-call-${index}`, depth)).join("")}</div></details>` : ""}
+            </div>
+          </details>
+        `;
+      }
+
+      function renderChildCodeBlock(block, path, depth) {
+        const result = block.result || {};
+        const calls = result.rlm_calls || [];
+        return `
+          <details>
+            <summary>Code Block ${escapeHtml(path.split("-").at(-1))}</summary>
+            <div class="details-body">
+              <h3>Code</h3>
+              <pre>${escapeHtml(block.code || "")}</pre>
+              ${result.stdout ? `<h3 style="margin-top: 14px">stdout</h3><pre>${escapeHtml(result.stdout)}</pre>` : ""}
+              ${result.stderr ? `<h3 style="margin-top: 14px">stderr</h3><pre>${escapeHtml(result.stderr)}</pre>` : ""}
+              ${result.final_answer ? `<h3 style="margin-top: 14px">Final From REPL</h3><pre>${escapeHtml(result.final_answer)}</pre>` : ""}
+              ${calls.length ? `<details><summary>Subcalls (${countNestedCalls(calls)})</summary><div class="details-body">${calls.map((call, index) => renderNestedCall(call, `${path}-call-${index}`, depth)).join("")}</div></details>` : ""}
+            </div>
+          </details>
+        `;
+      }
+
+      function activateTab(button) {
+        const panelId = button.dataset.panelTab;
+        const article = button.closest(".iteration");
+        article.querySelectorAll(".tab").forEach((tab) => {
+          tab.classList.toggle("active", tab === button);
+        });
+        article.querySelectorAll(".tab-panel").forEach((panel) => {
+          panel.classList.toggle("hidden", panel.id !== panelId);
+        });
+      }
+
+      function renderLazySection(id) {
+        const target = document.getElementById(id);
+        if (!target || target.dataset.rendered === "true") return;
+
+        const iteration = state.iterationById.get(String(target.dataset.iteration));
+        if (!iteration) return;
+
+        let text = "";
+        if (target.dataset.lazyKind === "prompt") {
+          text = getPromptText(iteration.prompt);
+        } else if (target.dataset.lazyKind === "code") {
+          const block = (iteration.code_blocks || [])[Number(target.dataset.blockIndex)];
+          text = block?.code || "";
+        }
+
+        target.textContent = text;
+        target.dataset.rendered = "true";
+        target.classList.remove("hidden");
+      }
+
+      function applySearch() {
+        const query = els.searchInput.value.trim().toLowerCase();
+        state.query = query;
+        els.content.querySelectorAll(".iteration").forEach((article) => {
+          const visible = !query || article.dataset.searchText.includes(query);
+          article.classList.toggle("hidden", !visible);
+        });
+      }
+
+      els.fileInput.addEventListener("change", (event) => {
+        const file = event.target.files?.[0];
+        if (file) loadFile(file).catch(showError);
+      });
+
+      els.dropZone.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        els.dropZone.classList.add("dragging");
+      });
+      els.dropZone.addEventListener("dragleave", () => {
+        els.dropZone.classList.remove("dragging");
+      });
+      els.dropZone.addEventListener("drop", (event) => {
+        event.preventDefault();
+        els.dropZone.classList.remove("dragging");
+        const file = event.dataTransfer.files?.[0];
+        if (file) loadFile(file).catch(showError);
+      });
+
+      els.searchInput.addEventListener("input", applySearch);
+      els.expandAll.addEventListener("click", () => {
+        document.querySelectorAll("details").forEach((detail) => {
+          detail.open = true;
+        });
+      });
+      els.collapseAll.addEventListener("click", () => {
+        document.querySelectorAll("details").forEach((detail) => {
+          detail.open = false;
+        });
+      });
+
+      function showError(error) {
+        els.content.innerHTML = `<div class="empty"><strong>Could not load file.</strong><br>${escapeHtml(error.message)}</div>`;
+      }
+    </script>
+  </body>
+</html>

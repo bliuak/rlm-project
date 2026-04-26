@@ -1,7 +1,9 @@
 .env
-results/
-logs/
 .hf-cache/
 .python-deps/
+logs/
+results/
+benchmark_tests/__pycache__/
 __pycache__/
 *.pyc
+.DS_Store
