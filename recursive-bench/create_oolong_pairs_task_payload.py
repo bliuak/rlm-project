@@ -27,11 +27,7 @@ def parse_backend_kwargs(values: list[str]) -> dict[str, Any]:
 
 
 def render_prompt(payload: dict[str, Any]) -> str:
-    return (
-        f"{payload['context']}\n\n"
-        f"Question:\n{payload['question']}\n\n"
-        f"Answer format:\n{payload['answer_format']}\n"
-    )
+    return str(payload["prompt"])
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -61,6 +57,7 @@ def main() -> None:
 
     payload = {
         "task": row["task_type"],
+        "prompt": row["prompt"],
         "context": row["context"],
         "question": row["question"],
         "answer_format": ANSWER_FORMAT,
@@ -97,7 +94,7 @@ def main() -> None:
         max_depth=args.max_depth,
         max_iterations=args.max_iterations,
     )
-    completion = rlm.completion(payload)
+    completion = rlm.completion(payload["prompt"])
     print("\nModel answer:\n")
     print(completion.response)
 

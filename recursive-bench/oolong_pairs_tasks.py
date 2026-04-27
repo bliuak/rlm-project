@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import json
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import date, datetime
 from itertools import combinations
+from pathlib import Path
 from typing import Callable
 
 
@@ -16,7 +18,8 @@ LABELS = (
     "abbreviation",
 )
 
-LABEL_LIST = ", ".join(f"'{label}'" for label in LABELS)
+LABEL_LIST = ", ".join(LABELS)
+PAPER_TASK_PROMPTS_PATH = Path(__file__).with_name("oolong_pairs_paper_task_prompts.json")
 
 
 @dataclass(frozen=True)
@@ -125,13 +128,15 @@ TASK_SPECS: dict[str, TaskSpec] = {
         "In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) "
         "where both users have at least one instance with a human being or location, and all instances "
         "that are a human being for both users must be after January 6, 2023.",
-        lambda e: has_any(e, {"human being", "location"}) and all_dates_after(e, "human being", date(2023, 1, 6)),
+        lambda e: has_any(e, {"human being", "location"})
+        and all(record.when > date(2023, 1, 6) for record in e if record.label == "human being"),
     ),
     "paper_05": symmetric(
         "In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) "
         "where both users have at least one instance with an entity or numeric value, and all instances "
         "that are an entity for both users must be before March 15, 2023.",
-        lambda e: has_any(e, {"entity", "numeric value"}) and all_dates_before(e, "entity", date(2023, 3, 15)),
+        lambda e: has_any(e, {"entity", "numeric value"})
+        and all(record.when < date(2023, 3, 15) for record in e if record.label == "entity"),
     ),
     "paper_06": symmetric(
         "In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) "
@@ -234,6 +239,21 @@ for key, spec in list(TASK_SPECS.items()):
         )
 
 
+def load_paper_task_prompts() -> dict[str, str]:
+    prompts = json.loads(PAPER_TASK_PROMPTS_PATH.read_text(encoding="utf-8"))
+    missing = sorted(set(TASK_SPECS) - set(prompts))
+    extra = sorted(set(prompts) - set(TASK_SPECS))
+    if missing or extra:
+        raise ValueError(
+            f"{PAPER_TASK_PROMPTS_PATH} must match TASK_SPECS. "
+            f"Missing: {missing}. Extra: {extra}."
+        )
+    return {name: str(prompt).strip() for name, prompt in prompts.items()}
+
+
+PAPER_TASK_PROMPTS = load_paper_task_prompts()
+
+
 def compute_expected_pairs(
     per_user: dict[int, list[Record]],
     task_name: str,
@@ -260,8 +280,8 @@ def format_pairs(pairs: list[tuple[int, int]]) -> str:
     return "\n".join(f"({a}, {b})" for a, b in pairs)
 
 
-def render_context(records: list[Record]) -> str:
-    preamble = (
+def render_instructions(records: list[Record]) -> str:
+    return (
         f"The following dataset contains {len(records)} entries. Each entry has a date, a user ID, "
         "and a small reasoning problem ending with the question \"What should be reported?\" "
         "The reported value is not shown. To use an entry, first solve its reasoning problem and "
@@ -273,16 +293,25 @@ def render_context(records: list[Record]) -> str:
         "abstract concept.\n\n"
         "Users may have multiple entries. Pair questions ask about aggregate counts or existence of these "
         f"inferred answer categories per user across all {len(records)} entries. Do not guess. Calculate "
-        "the exact answer from the entries below.\n\n"
+        "the exact answer from the entries."
     )
-    return preamble + "\n".join(record.public_line for record in records)
+
+
+def render_entries(records: list[Record]) -> str:
+    return "\n".join(record.public_line for record in records)
+
+
+def render_context(records: list[Record]) -> str:
+    return f"{render_instructions(records)}\n\nEntries:\n{render_entries(records)}"
 
 
 def full_question(task_name: str) -> str:
+    return PAPER_TASK_PROMPTS[task_name]
+
+
+def render_task_prompt(records: list[Record], task_name: str) -> str:
     return (
-        TASK_SPECS[task_name].question
-        + " For each entry, solve the entry's question and classify the reported value into one of these labels "
-        + f"(the data does not provide the reported values or labels, you need to infer them): {LABEL_LIST}. "
-        + "In your answer, list all pairs in the format (user_id_1, user_id_2), separated by newlines. "
-        + "Your answer must be sorted by first user ID. If there is no answer, return an empty list []."
+        f"Instructions:\n{render_instructions(records)}\n\n"
+        f"Prompt:\n{full_question(task_name)}\n\n"
+        f"Entries/data:\n{render_entries(records)}"
     )

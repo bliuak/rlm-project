@@ -12,6 +12,7 @@ from oolong_pairs_tasks import (
     parse_records,
     records_by_user,
     render_context,
+    render_task_prompt,
 )
 
 
@@ -40,6 +41,7 @@ def generate_task_rows(items: list[dict], task_names: list[str]) -> list[dict]:
                 "task_type": task_name,
                 "context": context,
                 "question": full_question(task_name),
+                "prompt": render_task_prompt(records, task_name),
                 "expected_answer": format_pairs(expected_pairs),
                 "expected_pair_count": len(expected_pairs),
                 "metadata": {

@@ -121,14 +121,7 @@ def main() -> None:
             completion = None
             if not args.dry_run:
                 try:
-                    completion = rlm.completion(
-                        {
-                            "context": row["context"],
-                            "question": row["question"],
-                            "answer_format": "Return only sorted pairs in the format (user_id_1, user_id_2), one per line. Return [] if there are no matching pairs.",
-                            "task_type": row["task_type"],
-                        }
-                    )
+                    completion = rlm.completion(row["prompt"])
                     response_text = completion_response_text(completion)
                     if response_text is None:
                         error = "RuntimeError: RLM completion returned no response"

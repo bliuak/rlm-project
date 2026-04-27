@@ -158,11 +158,39 @@ Generate verified answers and task JSONL (all 20 paper tasks):
 python recursive-bench/generate_oolong_pairs_verified_answers.py
 ```
 
-Create one task payload (context + unlabeled entries + question), and optionally run it:
+Create one task payload. The JSON includes structured fields plus a `prompt` field
+ordered as instructions, task prompt, then entries/data. Use `--prompt-out` to
+write that exact prompt as plain text for regular LLMs:
 
 ```bash
 python recursive-bench/create_oolong_pairs_task_payload.py --task paper_20
+python recursive-bench/create_oolong_pairs_task_payload.py --task paper_20 --prompt-out results/sample_paper_20_prompt.txt
 python recursive-bench/create_oolong_pairs_task_payload.py --task paper_20 --run
+```
+
+The paper task prompt text is stored verbatim in
+`recursive-bench/oolong_pairs_paper_task_prompts.json`. Edit that file when the
+paper wording changes; the Python module keeps only the answer-verification
+predicates.
+
+Verify a paper task exhaustively from the stored `correct_answer` and
+`correct_category` fields. This enumerates every user pair, records why it is
+included/excluded, and compares the computed answer to the generated answer
+file when present:
+
+```bash
+python recursive-bench/verify_oolong_pairs_task.py --task paper_20 --audit-json results/audits/paper_20.json --fail-on-mismatch
+```
+
+For papers 1-5, there are also standalone answer scripts that encode the
+prompt criterion directly, without using the shared task predicate:
+
+```bash
+python recursive-bench/generate_paper_01_pair_answer.py --output results/paper_01_independent_answer.txt --audit-json results/audits/paper_01_independent.json --fail-on-mismatch
+python recursive-bench/generate_paper_02_pair_answer.py --output results/paper_02_independent_answer.txt --audit-json results/audits/paper_02_independent.json --fail-on-mismatch
+python recursive-bench/generate_paper_03_pair_answer.py --output results/paper_03_independent_answer.txt --audit-json results/audits/paper_03_independent.json --fail-on-mismatch
+python recursive-bench/generate_paper_04_pair_answer.py --output results/paper_04_independent_answer.txt --audit-json results/audits/paper_04_independent.json --fail-on-mismatch
+python recursive-bench/generate_paper_05_pair_answer.py --output results/paper_05_independent_answer.txt --audit-json results/audits/paper_05_independent.json --fail-on-mismatch
 ```
 
 Run all paper tasks against an RLM backend (OpenRouter by default):
@@ -170,4 +198,3 @@ Run all paper tasks against an RLM backend (OpenRouter by default):
 ```bash
 python recursive-bench/test_oolong_pairs_rlms.py --backend openrouter --model-name openai/gpt-5.4-mini
 ```
-
