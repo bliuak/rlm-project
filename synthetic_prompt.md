@@ -12,22 +12,21 @@ Step 2: Use the solved result to decide what answer should be reported.
 The correct answer must belong to exactly one of these six categories:
 
 1. abbreviation
-   Examples: "NASA", "SNCF", "HTML", "UNESCO"
+   Examples: "NASA"
 
 2. entity
-   Examples: "Saturn V", "Aurora Beacon", "The Odyssey", "Toyota Prius", "World Health Organization"
+   Examples: "Saturn V"
 
 3. human being
-   Examples: "Ada Lovelace", "Grace Hopper", "Maya Chen"
+   Examples: "Sam Altman"
 
 4. numeric value
    Examples: "38", "165 minutes", "$42.50", "7.2 kilometers"
 
 5. location
-   Examples: "Lisbon", "Kyoto", "Lake Erie", "Nairobi"
-
+   Examples: "Boston"
 6. description and abstract concept
-   Examples: "supply shortage", "photosynthesis", "inventory overflow", "vendor dependency"
+   Examples: "supply shortage", "photosynthesis"
 
 Important category rule:
 The category is determined by the final correct answer, not by the wording of the question. For example, a record about boxes might have correct answer "Lisbon", whose category is "location", if the decision rule says to report the destination city.
