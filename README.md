@@ -148,3 +148,26 @@ Use a model with a context window larger than the benchmark context size.
 
 Open `trajectory_viewer/index.html` in a browser, then drop one of the JSONL
 files from `logs/` into the viewer.
+
+
+## OOLONG-Pairs Paper Tasks (1-20) on Local Synthetic Records
+
+Generate verified answers and task JSONL (all 20 paper tasks):
+
+```bash
+python recursive-bench/generate_oolong_pairs_verified_answers.py
+```
+
+Create one task payload (context + unlabeled entries + question), and optionally run it:
+
+```bash
+python recursive-bench/create_oolong_pairs_task_payload.py --task paper_20
+python recursive-bench/create_oolong_pairs_task_payload.py --task paper_20 --run
+```
+
+Run all paper tasks against an RLM backend (OpenRouter by default):
+
+```bash
+python recursive-bench/test_oolong_pairs_rlms.py --backend openrouter --model-name openai/gpt-5.4-mini
+```
+
