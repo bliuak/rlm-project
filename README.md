@@ -158,6 +158,12 @@ Generate verified answers and task JSONL (all 20 paper tasks):
 python recursive-bench/generate_oolong_pairs_verified_answers.py
 ```
 
+For papers 1-5, this generator reads the answer key from the standalone
+criterion scripts (`generate_paper_01_pair_answer.py` through
+`generate_paper_05_pair_answer.py`). The generated JSONL stores the script path
+in `metadata.answer_source`, and the RLM result JSONL copies it to
+`expected_answer_source`.
+
 Create one task payload. The JSON includes structured fields plus a `prompt` field
 ordered as instructions, task prompt, then entries/data. Use `--prompt-out` to
 write that exact prompt as plain text for regular LLMs:

@@ -62,6 +62,7 @@ def main() -> None:
         "question": row["question"],
         "answer_format": ANSWER_FORMAT,
         "entries_have_no_labels": True,
+        "metadata": row["metadata"],
     }
 
     args.payload_out.parent.mkdir(parents=True, exist_ok=True)

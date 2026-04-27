@@ -56,7 +56,12 @@ def parse_pairs(text: str) -> set[tuple[str, str]]:
     normalized = text.strip().lower()
     if normalized in {"", "[]", "empty list", "none"}:
         return set()
-    return {tuple(sorted((a, b), key=int)) for a, b in PAIR_RE.findall(text)}
+    pairs: set[tuple[str, str]] = set()
+    for a, b in PAIR_RE.findall(text):
+        if a == b:
+            continue
+        pairs.add(tuple(sorted((a, b), key=int)))
+    return pairs
 
 
 def f1(actual: str, expected: str) -> float:
@@ -80,6 +85,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--model-name", default="openai/gpt-5.4-mini")
     parser.add_argument("--backend-kwarg", action="append", default=[], metavar="KEY=VALUE")
     parser.add_argument("--max-depth", type=int, default=1)
+    parser.add_argument("--depth", type=int, default=1)
     parser.add_argument("--max-iterations", type=int, default=30)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--output", type=Path, default=Path("results/oolong_pairs_rlm_eval.jsonl"))
@@ -113,6 +119,7 @@ def main() -> None:
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     total = 0.0
+    run_started = time.perf_counter()
     with args.output.open("w", encoding="utf-8") as handle:
         for row in rows:
             started = time.perf_counter()
@@ -132,22 +139,30 @@ def main() -> None:
                     error = f"{type(exc).__name__}: {exc}"
 
             score = 0.0 if error else f1(actual, row["expected_answer"])
+            latency_ms = (time.perf_counter() - started) * 1000
             total += score
             out = {
                 "task": row["task_type"],
                 "score": score,
                 "expected_answer": row["expected_answer"],
+                "expected_pair_count": row["expected_pair_count"],
+                "expected_answer_source": row.get("metadata", {}).get("answer_source"),
                 "actual_answer": actual,
                 "error": error,
-                "latency_ms": (time.perf_counter() - started) * 1000,
+                "latency_ms": latency_ms,
+                "latency_seconds": latency_ms / 1000,
             }
             if error and completion is not None:
                 out["completion"] = completion_debug_summary(completion)
             handle.write(json.dumps(out, ensure_ascii=False) + "\n")
-            print(f"{row['task_type']}: score={score:.4f} error={error}")
+            print(
+                f"{row['task_type']}: score={score:.4f} "
+                f"runtime={latency_ms / 1000:.2f}s error={error}"
+            )
 
     avg = total / len(rows) if rows else 0.0
-    print(f"\nCompleted {len(rows)} tasks. Average score: {avg:.4f}")
+    total_runtime = time.perf_counter() - run_started
+    print(f"\nCompleted {len(rows)} tasks in {total_runtime:.2f}s. Average score: {avg:.4f}")
     print(f"Results: {args.output}")
 
 
