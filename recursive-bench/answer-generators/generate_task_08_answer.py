@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-# Task 01: both users have at least one numeric value or location instance.
+# Task 08: both users have at least one human being or description/abstract concept instance.
 
 from collections import defaultdict
 from itertools import combinations
@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 
-TARGET_CATEGORIES = {"numeric value", "location"}
+TARGET_CATEGORIES = {"human being", "description and abstract concept"}
 
 
 def group_categories_by_user(items: list[dict[str, Any]]) -> dict[int, list[str]]:
@@ -21,7 +21,7 @@ def group_categories_by_user(items: list[dict[str, Any]]) -> dict[int, list[str]
     return {user: categories_by_user[user] for user in sorted(categories_by_user)}
 
 
-def user_satisfies_task_01(categories: list[str]) -> bool:
+def user_satisfies_task_08(categories: list[str]) -> bool:
     return any(category in TARGET_CATEGORIES for category in categories)
 
 
@@ -29,7 +29,7 @@ def expected_pairs(categories_by_user: dict[int, list[str]]) -> list[tuple[int, 
     qualifying_users = [
         user
         for user, categories in categories_by_user.items()
-        if user_satisfies_task_01(categories)
+        if user_satisfies_task_08(categories)
     ]
     return list(combinations(qualifying_users, 2))
 
@@ -42,7 +42,7 @@ def build_audit(items: list[dict[str, Any]], _compare_to: Path | None) -> dict[s
     pairs = expected_pairs(group_categories_by_user(items))
     answer = format_pairs(pairs)
     return {
-        "task": "task_01",
+        "task": "task_08",
         "pair_count": len(pairs),
         "computed_answer": answer,
     }

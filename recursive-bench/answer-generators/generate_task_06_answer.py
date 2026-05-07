@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+# Task 06: both users have at least one location or abbreviation instance.
+
 from collections import defaultdict
 from itertools import combinations
 from pathlib import Path

@@ -15,6 +15,10 @@ from generate_task_03_answer import build_audit as build_task_03_audit
 from generate_task_04_answer import build_audit as build_task_04_audit
 from generate_task_05_answer import build_audit as build_task_05_audit
 from generate_task_06_answer import build_audit as build_task_06_audit
+from generate_task_07_answer import build_audit as build_task_07_audit
+from generate_task_08_answer import build_audit as build_task_08_audit
+from generate_task_09_answer import build_audit as build_task_09_audit
+from generate_task_10_answer import build_audit as build_task_10_audit
 from oolong_pairs_tasks import (
     TASK_SPECS,
     compute_expected_pairs,
@@ -37,6 +41,10 @@ STANDALONE_ANSWER_BUILDERS: dict[str, tuple[str, StandaloneAuditBuilder]] = {
     "task_04": ("recursive-bench/answer-generators/generate_task_04_answer.py", build_task_04_audit),
     "task_05": ("recursive-bench/answer-generators/generate_task_05_answer.py", build_task_05_audit),
     "task_06": ("recursive-bench/answer-generators/generate_task_06_answer.py", build_task_06_audit),
+    "task_07": ("recursive-bench/answer-generators/generate_task_07_answer.py", build_task_07_audit),
+    "task_08": ("recursive-bench/answer-generators/generate_task_08_answer.py", build_task_08_audit),
+    "task_09": ("recursive-bench/answer-generators/generate_task_09_answer.py", build_task_09_audit),
+    "task_10": ("recursive-bench/answer-generators/generate_task_10_answer.py", build_task_10_audit),
 }
 
 
