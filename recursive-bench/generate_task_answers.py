@@ -19,6 +19,16 @@ from generate_task_07_answer import build_audit as build_task_07_audit
 from generate_task_08_answer import build_audit as build_task_08_audit
 from generate_task_09_answer import build_audit as build_task_09_audit
 from generate_task_10_answer import build_audit as build_task_10_audit
+from generate_task_11_answer import build_audit as build_task_11_audit
+from generate_task_12_answer import build_audit as build_task_12_audit
+from generate_task_13_answer import build_audit as build_task_13_audit
+from generate_task_14_answer import build_audit as build_task_14_audit
+from generate_task_15_answer import build_audit as build_task_15_audit
+from generate_task_16_answer import build_audit as build_task_16_audit
+from generate_task_17_answer import build_audit as build_task_17_audit
+from generate_task_18_answer import build_audit as build_task_18_audit
+from generate_task_19_answer import build_audit as build_task_19_audit
+from generate_task_20_answer import build_audit as build_task_20_audit
 from oolong_pairs_tasks import (
     TASK_SPECS,
     compute_expected_pairs,
@@ -45,6 +55,16 @@ STANDALONE_ANSWER_BUILDERS: dict[str, tuple[str, StandaloneAuditBuilder]] = {
     "task_08": ("recursive-bench/answer-generators/generate_task_08_answer.py", build_task_08_audit),
     "task_09": ("recursive-bench/answer-generators/generate_task_09_answer.py", build_task_09_audit),
     "task_10": ("recursive-bench/answer-generators/generate_task_10_answer.py", build_task_10_audit),
+    "task_11": ("recursive-bench/answer-generators/generate_task_11_answer.py", build_task_11_audit),
+    "task_12": ("recursive-bench/answer-generators/generate_task_12_answer.py", build_task_12_audit),
+    "task_13": ("recursive-bench/answer-generators/generate_task_13_answer.py", build_task_13_audit),
+    "task_14": ("recursive-bench/answer-generators/generate_task_14_answer.py", build_task_14_audit),
+    "task_15": ("recursive-bench/answer-generators/generate_task_15_answer.py", build_task_15_audit),
+    "task_16": ("recursive-bench/answer-generators/generate_task_16_answer.py", build_task_16_audit),
+    "task_17": ("recursive-bench/answer-generators/generate_task_17_answer.py", build_task_17_audit),
+    "task_18": ("recursive-bench/answer-generators/generate_task_18_answer.py", build_task_18_audit),
+    "task_19": ("recursive-bench/answer-generators/generate_task_19_answer.py", build_task_19_audit),
+    "task_20": ("recursive-bench/answer-generators/generate_task_20_answer.py", build_task_20_audit),
 }
 
 
