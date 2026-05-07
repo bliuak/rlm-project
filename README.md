@@ -159,10 +159,10 @@ python recursive-bench/generate_oolong_pairs_verified_answers.py
 ```
 
 For papers 1-5, this generator reads the answer key from the standalone
-criterion scripts (`generate_paper_01_pair_answer.py` through
-`generate_paper_05_pair_answer.py`). The generated JSONL stores the script path
-in `metadata.answer_source`, and the RLM result JSONL copies it to
-`expected_answer_source`.
+criterion scripts in `recursive-bench/answer-generators/`
+(`generate_task_01_answer.py` through `generate_task_05_answer.py`). The
+generated JSONL stores the script path in `metadata.answer_source`, and the RLM
+result JSONL copies it to `expected_answer_source`.
 
 Create one task payload. The JSON includes structured fields plus a `prompt` field
 ordered as instructions, task prompt, then entries/data. Use `--prompt-out` to
@@ -192,11 +192,11 @@ For papers 1-5, there are also standalone answer scripts that encode the
 prompt criterion directly, without using the shared task predicate:
 
 ```bash
-python recursive-bench/generate_paper_01_pair_answer.py --output results/paper_01_independent_answer.txt --audit-json results/audits/paper_01_independent.json --fail-on-mismatch
-python recursive-bench/generate_paper_02_pair_answer.py --output results/paper_02_independent_answer.txt --audit-json results/audits/paper_02_independent.json --fail-on-mismatch
-python recursive-bench/generate_paper_03_pair_answer.py --output results/paper_03_independent_answer.txt --audit-json results/audits/paper_03_independent.json --fail-on-mismatch
-python recursive-bench/generate_paper_04_pair_answer.py --output results/paper_04_independent_answer.txt --audit-json results/audits/paper_04_independent.json --fail-on-mismatch
-python recursive-bench/generate_paper_05_pair_answer.py --output results/paper_05_independent_answer.txt --audit-json results/audits/paper_05_independent.json --fail-on-mismatch
+python recursive-bench/answer-generators/generate_task_01_answer.py --output results/paper_01_independent_answer.txt --audit-json results/audits/paper_01_independent.json --fail-on-mismatch
+python recursive-bench/answer-generators/generate_task_02_answer.py --output results/paper_02_independent_answer.txt --audit-json results/audits/paper_02_independent.json --fail-on-mismatch
+python recursive-bench/answer-generators/generate_task_03_answer.py --output results/paper_03_independent_answer.txt --audit-json results/audits/paper_03_independent.json --fail-on-mismatch
+python recursive-bench/answer-generators/generate_task_04_answer.py --output results/paper_04_independent_answer.txt --audit-json results/audits/paper_04_independent.json --fail-on-mismatch
+python recursive-bench/answer-generators/generate_task_05_answer.py --output results/paper_05_independent_answer.txt --audit-json results/audits/paper_05_independent.json --fail-on-mismatch
 ```
 
 Run all paper tasks against an RLM backend (OpenRouter by default):

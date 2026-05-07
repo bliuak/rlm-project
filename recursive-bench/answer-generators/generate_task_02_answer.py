@@ -3,18 +3,17 @@ from __future__ import annotations
 import argparse
 import json
 from collections import Counter, defaultdict
-from datetime import date, datetime
 from itertools import combinations
 from pathlib import Path
 from typing import Any
 
 
-DEFAULT_RECORDS_PATH = Path(__file__).resolve().parents[1] / "synthetic_user_records.json"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_RECORDS_PATH = PROJECT_ROOT / "synthetic_user_records.json"
 DEFAULT_EXISTING_ANSWER = (
-    Path(__file__).resolve().parents[1] / "results" / "oolong_pairs_verified_answers" / "paper_05.txt"
+    PROJECT_ROOT / "results" / "oolong_pairs_verified_answers" / "paper_02.txt"
 )
-CUTOFF = date(2023, 3, 15)
-TARGET_CATEGORIES = {"entity", "numeric value"}
+TARGET_CATEGORIES = {"entity", "human being"}
 
 
 def load_items(path: Path) -> list[dict[str, Any]]:
@@ -23,13 +22,6 @@ def load_items(path: Path) -> list[dict[str, Any]]:
     if not isinstance(items, list):
         raise ValueError(f"{path} must contain a top-level 'items' list")
     return items
-
-
-def parse_date(raw: Any, index: int) -> date:
-    try:
-        return datetime.strptime(str(raw), "%Y-%m-%d").date()
-    except ValueError as exc:
-        raise ValueError(f"item[{index}] has invalid date: {raw!r}") from exc
 
 
 def group_records_by_user(items: list[dict[str, Any]]) -> dict[int, list[dict[str, Any]]]:
@@ -41,7 +33,7 @@ def group_records_by_user(items: list[dict[str, Any]]) -> dict[int, list[dict[st
         records_by_user[int(item["user"])].append(
             {
                 "record_index": index,
-                "date": parse_date(item["date"], index),
+                "date": item["date"],
                 "correct_answer": item["correct_answer"],
                 "correct_category": item["correct_category"],
             }
@@ -49,65 +41,26 @@ def group_records_by_user(items: list[dict[str, Any]]) -> dict[int, list[dict[st
     return {user: records_by_user[user] for user in sorted(records_by_user)}
 
 
-def user_satisfies_paper_05(records: list[dict[str, Any]]) -> bool:
-    """Encode paper_05 directly from the question text.
-
-    A user qualifies if:
-    1. They have at least one entry whose answer label is entity OR numeric value.
-    2. Every entity entry they have is strictly before Mar 15, 2023.
-
-    Clause 2 is universal: a user with numeric-value entries and no entity
-    entries satisfies it, because they have no entity entries violating the date
-    condition.
-    """
-    has_entity_or_numeric = any(
-        record["correct_category"] in TARGET_CATEGORIES for record in records
-    )
-    all_entities_before_cutoff = all(
-        record["date"] < CUTOFF
-        for record in records
-        if record["correct_category"] == "entity"
-    )
-    return has_entity_or_numeric and all_entities_before_cutoff
+def user_satisfies_paper_02(records: list[dict[str, Any]]) -> bool:
+    return any(record["correct_category"] in TARGET_CATEGORIES for record in records)
 
 
 def user_audit(records: list[dict[str, Any]]) -> dict[str, Any]:
     counts = Counter(record["correct_category"] for record in records)
-    entity_entries = [
-        {
-            "record_index": record["record_index"],
-            "date": record["date"].isoformat(),
-            "correct_answer": record["correct_answer"],
-            "is_before_2023_03_15": record["date"] < CUTOFF,
-        }
-        for record in records
-        if record["correct_category"] == "entity"
-    ]
     target_entries = [
-        {
-            "record_index": record["record_index"],
-            "date": record["date"].isoformat(),
-            "correct_answer": record["correct_answer"],
-            "correct_category": record["correct_category"],
-        }
-        for record in records
-        if record["correct_category"] in TARGET_CATEGORIES
+        record for record in records if record["correct_category"] in TARGET_CATEGORIES
     ]
     return {
         "category_counts": dict(sorted(counts.items())),
-        "has_entity_or_numeric_value": bool(target_entries),
-        "entity_entries": entity_entries,
-        "all_entity_entries_before_2023_03_15": all(
-            entry["is_before_2023_03_15"] for entry in entity_entries
-        ),
-        "qualifies": user_satisfies_paper_05(records),
+        "has_entity_or_human_being": bool(target_entries),
+        "qualifies": user_satisfies_paper_02(records),
         "target_entries": target_entries,
     }
 
 
 def expected_pairs(records_by_user: dict[int, list[dict[str, Any]]]) -> list[tuple[int, int]]:
     qualifying_users = [
-        user for user, records in records_by_user.items() if user_satisfies_paper_05(records)
+        user for user, records in records_by_user.items() if user_satisfies_paper_02(records)
     ]
     return list(combinations(qualifying_users, 2))
 
@@ -123,13 +76,8 @@ def build_audit(items: list[dict[str, Any]], compare_to: Path | None) -> dict[st
     existing = compare_to.read_text(encoding="utf-8").strip() if compare_to and compare_to.exists() else None
     users = {str(user): user_audit(records) for user, records in records_by_user.items()}
     return {
-        "task": "paper_05",
-        "criterion": (
-            "Both users have at least one instance with an entity or numeric value, "
-            "and every entity instance they have is strictly before 2023-03-15."
-        ),
-        "cutoff_date": CUTOFF.isoformat(),
-        "cutoff_is_strict": True,
+        "task": "paper_02",
+        "criterion": "Both users have at least one instance with an entity or human being.",
         "records_count": len(items),
         "user_count": len(records_by_user),
         "qualifying_users": [int(user) for user, audit in users.items() if audit["qualifies"]],
@@ -143,7 +91,7 @@ def build_audit(items: list[dict[str, Any]], compare_to: Path | None) -> dict[st
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Generate the paper_05 pair answer from a standalone criterion encoding.")
+    parser = argparse.ArgumentParser(description="Generate the paper_02 pair answer from a standalone criterion encoding.")
     parser.add_argument("records", nargs="?", type=Path, default=DEFAULT_RECORDS_PATH)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--audit-json", type=Path)
@@ -161,7 +109,7 @@ def main() -> None:
     if args.audit_json:
         args.audit_json.parent.mkdir(parents=True, exist_ok=True)
         args.audit_json.write_text(json.dumps(audit, indent=2) + "\n", encoding="utf-8")
-    print(f"paper_05 pair_count={audit['pair_count']}")
+    print(f"paper_02 pair_count={audit['pair_count']}")
     print(f"qualifying_users={audit['qualifying_users']}")
     print(f"compare_to_matches={audit['compare_to_matches']}")
     if not args.output:

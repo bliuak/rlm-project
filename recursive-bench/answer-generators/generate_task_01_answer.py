@@ -8,9 +8,10 @@ from pathlib import Path
 from typing import Any
 
 
-DEFAULT_RECORDS_PATH = Path(__file__).resolve().parents[1] / "synthetic_user_records.json"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_RECORDS_PATH = PROJECT_ROOT / "synthetic_user_records.json"
 DEFAULT_EXISTING_ANSWER = (
-    Path(__file__).resolve().parents[1] / "results" / "oolong_pairs_verified_answers" / "paper_01.txt"
+    PROJECT_ROOT / "results" / "oolong_pairs_verified_answers" / "paper_01.txt"
 )
 TARGET_CATEGORIES = {"numeric value", "location"}
 

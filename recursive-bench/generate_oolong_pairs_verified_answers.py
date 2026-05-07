@@ -2,14 +2,18 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Callable
 
-from generate_paper_01_pair_answer import build_audit as build_paper_01_audit
-from generate_paper_02_pair_answer import build_audit as build_paper_02_audit
-from generate_paper_03_pair_answer import build_audit as build_paper_03_audit
-from generate_paper_04_pair_answer import build_audit as build_paper_04_audit
-from generate_paper_05_pair_answer import build_audit as build_paper_05_audit
+ANSWER_GENERATORS_DIR = Path(__file__).resolve().parent / "answer-generators"
+sys.path.insert(0, str(ANSWER_GENERATORS_DIR))
+
+from generate_task_01_answer import build_audit as build_task_01_audit
+from generate_task_02_answer import build_audit as build_task_02_audit
+from generate_task_03_answer import build_audit as build_task_03_audit
+from generate_task_04_answer import build_audit as build_task_04_audit
+from generate_task_05_answer import build_audit as build_task_05_audit
 from oolong_pairs_tasks import (
     TASK_SPECS,
     compute_expected_pairs,
@@ -26,11 +30,11 @@ DEFAULT_RECORDS_PATH = Path(__file__).resolve().parents[1] / "synthetic_user_rec
 
 StandaloneAuditBuilder = Callable[[list[dict], Path | None], dict]
 STANDALONE_ANSWER_BUILDERS: dict[str, tuple[str, StandaloneAuditBuilder]] = {
-    "paper_01": ("recursive-bench/generate_paper_01_pair_answer.py", build_paper_01_audit),
-    "paper_02": ("recursive-bench/generate_paper_02_pair_answer.py", build_paper_02_audit),
-    "paper_03": ("recursive-bench/generate_paper_03_pair_answer.py", build_paper_03_audit),
-    "paper_04": ("recursive-bench/generate_paper_04_pair_answer.py", build_paper_04_audit),
-    "paper_05": ("recursive-bench/generate_paper_05_pair_answer.py", build_paper_05_audit),
+    "paper_01": ("recursive-bench/answer-generators/generate_task_01_answer.py", build_task_01_audit),
+    "paper_02": ("recursive-bench/answer-generators/generate_task_02_answer.py", build_task_02_audit),
+    "paper_03": ("recursive-bench/answer-generators/generate_task_03_answer.py", build_task_03_audit),
+    "paper_04": ("recursive-bench/answer-generators/generate_task_04_answer.py", build_task_04_audit),
+    "paper_05": ("recursive-bench/answer-generators/generate_task_05_answer.py", build_task_05_audit),
 }
 
 
