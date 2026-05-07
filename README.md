@@ -169,9 +169,9 @@ ordered as instructions, task prompt, then entries/data. Use `--prompt-out` to
 write that exact prompt as plain text for regular LLMs:
 
 ```bash
-python recursive-bench/create_oolong_pairs_task_payload.py --task paper_20
-python recursive-bench/create_oolong_pairs_task_payload.py --task paper_20 --prompt-out results/sample_paper_20_prompt.txt
-python recursive-bench/create_oolong_pairs_task_payload.py --task paper_20 --run
+python recursive-bench/task_prompt.py --task paper_20
+python recursive-bench/task_prompt.py --task paper_20 --prompt-out results/sample_paper_20_prompt.txt
+python recursive-bench/task_prompt.py --task paper_20 --run
 ```
 
 The paper task prompt text is stored verbatim in
@@ -202,5 +202,5 @@ python recursive-bench/answer-generators/generate_task_05_answer.py --output res
 Run all paper tasks against an RLM backend (OpenRouter by default):
 
 ```bash
-python recursive-bench/test_oolong_pairs_rlms.py --backend openrouter --model-name openai/gpt-5.4-mini
+python recursive-bench/run_recursive_bench.py --backend openrouter --model-name openai/gpt-5.4-mini
 ```
