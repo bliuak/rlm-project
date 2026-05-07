@@ -31,8 +31,6 @@ from generate_task_19_answer import build_audit as build_task_19_audit
 from generate_task_20_answer import build_audit as build_task_20_audit
 from oolong_pairs_tasks import (
     TASK_SPECS,
-    compute_expected_pairs,
-    format_pairs,
     full_question,
     parse_records,
     records_by_user,
@@ -78,24 +76,18 @@ def load_items(path: Path) -> list[dict]:
 
 def expected_answer_for_task(
     items: list[dict],
-    per_user: dict,
     task_name: str,
 ) -> tuple[str, int, str]:
     standalone = STANDALONE_ANSWER_BUILDERS.get(task_name)
-    if standalone:
-        script_path, build_audit = standalone
-        audit = build_audit(items, None)
-        return (
-            str(audit["computed_answer"]),
-            int(audit["pair_count"]),
-            script_path,
-        )
+    if standalone is None:
+        raise ValueError(f"No standalone answer generator registered for {task_name}")
 
-    expected_pairs = compute_expected_pairs(per_user, task_name)
+    script_path, build_audit = standalone
+    audit = build_audit(items, None)
     return (
-        format_pairs(expected_pairs),
-        len(expected_pairs),
-        "recursive-bench/oolong_pairs_tasks.py",
+        str(audit["computed_answer"]),
+        int(audit["pair_count"]),
+        script_path,
     )
 
 
@@ -108,7 +100,6 @@ def generate_task_rows(items: list[dict], task_names: list[str]) -> list[dict]:
     for task_name in task_names:
         expected_answer, expected_pair_count, answer_source = expected_answer_for_task(
             items,
-            per_user,
             task_name,
         )
         rows.append(
