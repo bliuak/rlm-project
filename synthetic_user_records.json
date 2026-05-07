@@ -1,4 +1,3 @@
-
 {
   "items": [
     {
@@ -840,6 +839,76 @@
       "record": "A patent register lists the following entries:\n- Patent #4471 by Hedy Lamarr (1942)\n- Patent #5012 by Nikola Tesla (1888)\n- Patent #7203 by Stephanie Kwolek (1965)\n- Patent #8801 by Hedy Lamarr (1947)\n\nDecision rule:\nIf exactly one inventor appears on more than one patent in the list, report that inventor.\nOtherwise, report the concept \"register ambiguity\".\n\nQuestion: What should be reported?",
       "correct_answer": "Hedy Lamarr",
       "correct_category": "human being"
+    },
+    {
+      "date": "2015-04-22",
+      "user": 1612,
+      "record": "A factory has 12 production lines. Each line produces 45 units per hour. All lines were scheduled to run 8 hours, but 3 lines were down for the entire day.\n\nDecision rule:\nIf the total number of units produced is less than 4000, report that number of units.\nOtherwise, report the floor supervisor: Hiroshi Tanaka.\n\nQuestion: What should be reported?",
+      "correct_answer": "3240",
+      "correct_category": "numeric value"
+    },
+    {
+      "date": "2019-08-30",
+      "user": 1085,
+      "record": "A package was dispatched on March 3, 2019 with an estimated delivery time of 14 days. Tracking later confirmed the package actually arrived 5 days later than the original estimate.\n\nDecision rule:\nIf the actual delivery date falls within March, report the origin warehouse city: Rotterdam.\nOtherwise, report the total transit time in days.\n\nQuestion: What should be reported?",
+      "correct_answer": "Rotterdam",
+      "correct_category": "location"
+    },
+    {
+      "date": "2022-01-15",
+      "user": 1239,
+      "record": "Quarterly sales totals for one regional team:\n- Q1: Diana Reyes — $48,000\n- Q2: Marcus Chen — $52,500\n- Q3: Diana Reyes — $61,200\n- Q4: Priya Singh — $44,800\n\nDecision rule:\nIf the highest single-quarter total exceeds $60,000, report the salesperson who achieved that quarter.\nOtherwise, report the reporting period abbreviation: YTD.\n\nQuestion: What should be reported?",
+      "correct_answer": "Diana Reyes",
+      "correct_category": "human being"
+    },
+    {
+      "date": "2017-06-09",
+      "user": 1924,
+      "record": "A pipeline carries 240 gallons per minute. (1 gallon ≈ 3.785 liters.)\n\nDecision rule:\nIf the flow rate exceeds 50,000 liters per hour, report the regulatory body code: EPA.\nOtherwise, report the operating city: Houston.\n\nQuestion: What should be reported?",
+      "correct_answer": "EPA",
+      "correct_category": "abbreviation"
+    },
+    {
+      "date": "2020-10-11",
+      "user": 1459,
+      "record": "Three incident reports list the root causes contributing to a project delay:\n- Report A: power outage, software bug, supply shortage\n- Report B: software bug, supply shortage, weather delay\n- Report C: supply shortage, hardware fault, vendor failure\n\nDecision rule:\nIf exactly one root cause appears in all three reports, report that cause.\nIf two or more causes appear in all three reports, report the project lead: Aaron Voss.\n\nQuestion: What should be reported?",
+      "correct_answer": "supply shortage",
+      "correct_category": "description and abstract concept"
+    },
+    {
+      "date": "2023-05-27",
+      "user": 1390,
+      "record": "A launch services review ranks four candidate vehicles by payload-to-low-Earth-orbit capacity:\n- Falcon Heavy: 63,800 kg\n- New Glenn: 45,000 kg\n- Ariane 6: 21,650 kg\n- Vulcan Centaur: 27,200 kg\n\nDecision rule:\nIf the second-highest capacity is greater than 40,000 kg, report the vehicle that has the second-highest capacity.\nOtherwise, report the agency abbreviation: ESA.\n\nQuestion: What should be reported?",
+      "correct_answer": "New Glenn",
+      "correct_category": "entity"
+    },
+    {
+      "date": "2014-09-04",
+      "user": 1239,
+      "record": "A bakery offers a 15% discount on any order whose pre-discount subtotal is greater than $80. A customer orders 7 cakes at $12.00 each and 4 pastries at $3.00 each.\n\nDecision rule:\nIf the discount applies, report the final amount actually paid.\nOtherwise, report the bakery's district: Montmartre.\n\nQuestion: What should be reported?",
+      "correct_answer": "$81.60",
+      "correct_category": "numeric value"
+    },
+    {
+      "date": "2016-11-18",
+      "user": 1034,
+      "record": "Three clues describe a single American mathematician:\n- She co-authored a 1959 NASA Langley report on equations for the trajectory of an orbital spacecraft.\n- She received the Presidential Medal of Freedom in 2015.\n- Her career was a central subject of the 2016 film \"Hidden Figures.\"\n\nDecision rule:\nIf all three clues uniquely identify a single individual, report that individual.\nOtherwise, report the concept: identification ambiguity.\n\nQuestion: What should be reported?",
+      "correct_answer": "Katherine Johnson",
+      "correct_category": "human being"
+    },
+    {
+      "date": "2025-03-07",
+      "user": 1000,
+      "record": "A flight departs Singapore at 23:50 local time on March 7, 2025. The scheduled flight duration is 13 hours 25 minutes. The destination's local time zone is exactly 8 hours behind Singapore's.\n\nDecision rule:\nIf the local arrival time at the destination is before 12:00 noon, report the destination city: London.\nOtherwise, report the flight number: BA12.\n\nQuestion: What should be reported?",
+      "correct_answer": "London",
+      "correct_category": "location"
+    },
+    {
+      "date": "2013-07-21",
+      "user": 1300,
+      "record": "A virology lab tested three patient samples for antibodies against several viruses:\n- Sample 1: HIV, HPV, EBV\n- Sample 2: HPV, HSV, EBV\n- Sample 3: HPV, HSV, HBV\n\nDecision rule:\nIf exactly one virus is present in all three samples, report that virus.\nIf two or more viruses are present in all three samples, report the description: co-occurrence pattern.\n\nQuestion: What should be reported?",
+      "correct_answer": "HPV",
+      "correct_category": "abbreviation"
     }
   ]
 }

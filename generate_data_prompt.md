@@ -65,7 +65,7 @@ Now generate records.
 
 Generation requirements:
 - Generate exactly {10} records.
-- Use user ID {1000}.
+- Use random user IDs between 1000 and 1500.
 - Each record must include a date between 2010-01-01 and 2026-12-31.
 - Use ISO date format: YYYY-MM-DD.
 - Every record must require two-step reasoning.
