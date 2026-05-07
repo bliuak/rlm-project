@@ -7,7 +7,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from generate_oolong_pairs_verified_answers import generate_task_rows, load_items
+from generate_task_answers import generate_task_rows, load_items
 from oolong_pairs_tasks import TASK_SPECS
 
 PAIR_RE = re.compile(r"\((\d+)\s*,\s*(\d+)\)")
@@ -78,7 +78,7 @@ def f1(actual: str, expected: str) -> float:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run OOLONG-Pairs paper tasks on RLM backends.")
+    parser = argparse.ArgumentParser(description="Run OOLONG-Pairs benchmark tasks on RLM backends.")
     parser.add_argument("records", nargs="?", type=Path, default=DEFAULT_RECORDS_PATH)
     parser.add_argument("--task", action="append", choices=sorted(TASK_SPECS))
     parser.add_argument("--backend", default="openrouter")

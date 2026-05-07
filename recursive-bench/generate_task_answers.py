@@ -14,6 +14,7 @@ from generate_task_02_answer import build_audit as build_task_02_audit
 from generate_task_03_answer import build_audit as build_task_03_audit
 from generate_task_04_answer import build_audit as build_task_04_audit
 from generate_task_05_answer import build_audit as build_task_05_audit
+from generate_task_06_answer import build_audit as build_task_06_audit
 from oolong_pairs_tasks import (
     TASK_SPECS,
     compute_expected_pairs,
@@ -30,11 +31,12 @@ DEFAULT_RECORDS_PATH = Path(__file__).resolve().parents[1] / "synthetic_user_rec
 
 StandaloneAuditBuilder = Callable[[list[dict], Path | None], dict]
 STANDALONE_ANSWER_BUILDERS: dict[str, tuple[str, StandaloneAuditBuilder]] = {
-    "paper_01": ("recursive-bench/answer-generators/generate_task_01_answer.py", build_task_01_audit),
-    "paper_02": ("recursive-bench/answer-generators/generate_task_02_answer.py", build_task_02_audit),
-    "paper_03": ("recursive-bench/answer-generators/generate_task_03_answer.py", build_task_03_audit),
-    "paper_04": ("recursive-bench/answer-generators/generate_task_04_answer.py", build_task_04_audit),
-    "paper_05": ("recursive-bench/answer-generators/generate_task_05_answer.py", build_task_05_audit),
+    "task_01": ("recursive-bench/answer-generators/generate_task_01_answer.py", build_task_01_audit),
+    "task_02": ("recursive-bench/answer-generators/generate_task_02_answer.py", build_task_02_audit),
+    "task_03": ("recursive-bench/answer-generators/generate_task_03_answer.py", build_task_03_audit),
+    "task_04": ("recursive-bench/answer-generators/generate_task_04_answer.py", build_task_04_audit),
+    "task_05": ("recursive-bench/answer-generators/generate_task_05_answer.py", build_task_05_audit),
+    "task_06": ("recursive-bench/answer-generators/generate_task_06_answer.py", build_task_06_audit),
 }
 
 
@@ -103,14 +105,14 @@ def generate_task_rows(items: list[dict], task_names: list[str]) -> list[dict]:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Generate verified OOLONG-Pairs task answers (paper tasks 1-20)."
+        description="Generate verified OOLONG-Pairs benchmark task answers (task_01 through task_20)."
     )
     parser.add_argument("records", nargs="?", type=Path, default=DEFAULT_RECORDS_PATH)
     parser.add_argument(
         "--task",
         action="append",
         choices=sorted(TASK_SPECS),
-        help="Only generate selected tasks. Defaults to all paper_01..paper_20.",
+        help="Only generate selected tasks. Defaults to all task_01..task_20.",
     )
     parser.add_argument(
         "--output-jsonl",

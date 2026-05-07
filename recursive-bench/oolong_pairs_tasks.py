@@ -19,7 +19,7 @@ LABELS = (
 )
 
 LABEL_LIST = ", ".join(LABELS)
-PAPER_TASK_PROMPTS_PATH = Path(__file__).with_name("oolong_pairs_paper_task_prompts.json")
+BENCHMARK_TASKS_PATH = Path(__file__).with_name("benchmark_tasks.json")
 
 
 @dataclass(frozen=True)
@@ -109,120 +109,120 @@ def symmetric(question: str, predicate: Predicate) -> TaskSpec:
 
 
 TASK_SPECS: dict[str, TaskSpec] = {
-    "paper_01": symmetric(
+    "task_01": symmetric(
         "In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) "
         "where both users have at least one instance with a numeric value or location.",
         lambda e: has_any(e, {"numeric value", "location"}),
     ),
-    "paper_02": symmetric(
+    "task_02": symmetric(
         "In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) "
         "where both users have at least one instance with an entity or human being.",
         lambda e: has_any(e, {"entity", "human being"}),
     ),
-    "paper_03": symmetric(
+    "task_03": symmetric(
         "In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) "
         "where both users have at least one instance with a description and abstract concept or abbreviation.",
         lambda e: has_any(e, {"description and abstract concept", "abbreviation"}),
     ),
-    "paper_04": symmetric(
+    "task_04": symmetric(
         "In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) "
         "where both users have at least one instance with a human being or location, and all instances "
         "that are a human being for both users must be after January 6, 2023.",
         lambda e: has_any(e, {"human being", "location"})
         and all(record.when > date(2023, 1, 6) for record in e if record.label == "human being"),
     ),
-    "paper_05": symmetric(
+    "task_05": symmetric(
         "In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) "
         "where both users have at least one instance with an entity or numeric value, and all instances "
         "that are an entity for both users must be before March 15, 2023.",
         lambda e: has_any(e, {"entity", "numeric value"})
         and all(record.when < date(2023, 3, 15) for record in e if record.label == "entity"),
     ),
-    "paper_06": symmetric(
+    "task_06": symmetric(
         "In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) "
         "where both users have at least one instance with a location or abbreviation.",
         lambda e: has_any(e, {"location", "abbreviation"}),
     ),
-    "paper_07": symmetric(
+    "task_07": symmetric(
         "In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) "
         "where both users have at least one instance with a description and abstract concept or numeric value, "
         "and all instances that are a numeric value for both users must be after February 1, 2023.",
         lambda e: has_any(e, {"description and abstract concept", "numeric value"})
         and all_dates_after(e, "numeric value", date(2023, 2, 1)),
     ),
-    "paper_08": symmetric(
+    "task_08": symmetric(
         "In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) "
         "where both users have at least one instance with a human being or description and abstract concept.",
         lambda e: has_any(e, {"human being", "description and abstract concept"}),
     ),
-    "paper_09": symmetric(
+    "task_09": symmetric(
         "In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) "
         "where both users have at least one instance with an entity or location, and all instances that "
         "are a location for both users must be after April 10, 2023.",
         lambda e: has_any(e, {"entity", "location"}) and all_dates_after(e, "location", date(2023, 4, 10)),
     ),
-    "paper_10": symmetric(
+    "task_10": symmetric(
         "In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) "
         "where both users have at least one instance with a numeric value or abbreviation, and all instances "
         "that are an abbreviation for both users must be before May 20, 2023.",
         lambda e: has_any(e, {"numeric value", "abbreviation"}) and all_dates_before(e, "abbreviation", date(2023, 5, 20)),
     ),
-    "paper_11": TaskSpec(
-        name="paper_11",
+    "task_11": TaskSpec(
+        name="task_11",
         question="In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) such that one user has at least one instance with entity and one with abbreviation, and the other user has exactly one instance with entity.",
         first_condition=lambda e: has(e, "entity") and has(e, "abbreviation"),
         second_condition=lambda e: count(e, "entity") == 1,
     ),
-    "paper_12": TaskSpec(
-        name="paper_12",
+    "task_12": TaskSpec(
+        name="task_12",
         question="In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) such that one user has at least two instances with numeric value, and the other user has at least one instance with location and at least one instance with human being.",
         first_condition=lambda e: count(e, "numeric value") >= 2,
         second_condition=lambda e: has(e, "location") and has(e, "human being"),
     ),
-    "paper_13": TaskSpec(
-        name="paper_13",
+    "task_13": TaskSpec(
+        name="task_13",
         question="In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) such that one user has exactly one instance with description and abstract concept, and the other user has at least one instance with abbreviation and at least one instance with entity.",
         first_condition=lambda e: count(e, "description and abstract concept") == 1,
         second_condition=lambda e: has(e, "abbreviation") and has(e, "entity"),
     ),
-    "paper_14": TaskSpec(
-        name="paper_14",
+    "task_14": TaskSpec(
+        name="task_14",
         question="In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) such that one user has at least one instance with human being and at least one instance with numeric value, and the other user has exactly two instances with location.",
         first_condition=lambda e: has(e, "human being") and has(e, "numeric value"),
         second_condition=lambda e: count(e, "location") == 2,
     ),
-    "paper_15": TaskSpec(
-        name="paper_15",
+    "task_15": TaskSpec(
+        name="task_15",
         question="In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) such that one user has at least one instance with entity, at least one instance with location, and at least one instance with abbreviation, and the other user has exactly one instance with numeric value.",
         first_condition=lambda e: has(e, "entity") and has(e, "location") and has(e, "abbreviation"),
         second_condition=lambda e: count(e, "numeric value") == 1,
     ),
-    "paper_16": TaskSpec(
-        name="paper_16",
+    "task_16": TaskSpec(
+        name="task_16",
         question="In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) such that one user has at least one instance with description and abstract concept and at least one instance with human being, and the other user has at least two instances with entity and exactly one instance with abbreviation.",
         first_condition=lambda e: has(e, "description and abstract concept") and has(e, "human being"),
         second_condition=lambda e: count(e, "entity") >= 2 and count(e, "abbreviation") == 1,
     ),
-    "paper_17": TaskSpec(
-        name="paper_17",
+    "task_17": TaskSpec(
+        name="task_17",
         question="In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) such that one user has exactly one instance with numeric value, and the other user has at least one instance with location and at least one instance with description and abstract concept.",
         first_condition=lambda e: count(e, "numeric value") == 1,
         second_condition=lambda e: has(e, "location") and has(e, "description and abstract concept"),
     ),
-    "paper_18": TaskSpec(
-        name="paper_18",
+    "task_18": TaskSpec(
+        name="task_18",
         question="In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) such that one user has at least one instance with abbreviation and exactly one instance with human being, and the other user has at least one instance with entity and at least one instance with numeric value.",
         first_condition=lambda e: has(e, "abbreviation") and count(e, "human being") == 1,
         second_condition=lambda e: has(e, "entity") and has(e, "numeric value"),
     ),
-    "paper_19": TaskSpec(
-        name="paper_19",
+    "task_19": TaskSpec(
+        name="task_19",
         question="In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) such that one user has at least two instances with location and at least one instance with entity, and the other user has exactly one instance with description and abstract concept and exactly one instance with abbreviation.",
         first_condition=lambda e: count(e, "location") >= 2 and has(e, "entity"),
         second_condition=lambda e: count(e, "description and abstract concept") == 1 and count(e, "abbreviation") == 1,
     ),
-    "paper_20": TaskSpec(
-        name="paper_20",
+    "task_20": TaskSpec(
+        name="task_20",
         question="In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) such that one user has at least one instance with numeric value and at least one instance with human being, and the other user has at least one instance with location, at least one instance with entity, and exactly one instance with abbreviation.",
         first_condition=lambda e: has(e, "numeric value") and has(e, "human being"),
         second_condition=lambda e: has(e, "location") and has(e, "entity") and count(e, "abbreviation") == 1,
@@ -239,19 +239,19 @@ for key, spec in list(TASK_SPECS.items()):
         )
 
 
-def load_paper_task_prompts() -> dict[str, str]:
-    prompts = json.loads(PAPER_TASK_PROMPTS_PATH.read_text(encoding="utf-8"))
+def load_benchmark_task_prompts() -> dict[str, str]:
+    prompts = json.loads(BENCHMARK_TASKS_PATH.read_text(encoding="utf-8"))
     missing = sorted(set(TASK_SPECS) - set(prompts))
     extra = sorted(set(prompts) - set(TASK_SPECS))
     if missing or extra:
         raise ValueError(
-            f"{PAPER_TASK_PROMPTS_PATH} must match TASK_SPECS. "
+            f"{BENCHMARK_TASKS_PATH} must match TASK_SPECS. "
             f"Missing: {missing}. Extra: {extra}."
         )
     return {name: str(prompt).strip() for name, prompt in prompts.items()}
 
 
-PAPER_TASK_PROMPTS = load_paper_task_prompts()
+BENCHMARK_TASK_PROMPTS = load_benchmark_task_prompts()
 
 
 def compute_expected_pairs(
@@ -306,7 +306,7 @@ def render_context(records: list[Record]) -> str:
 
 
 def full_question(task_name: str) -> str:
-    return PAPER_TASK_PROMPTS[task_name]
+    return BENCHMARK_TASK_PROMPTS[task_name]
 
 
 def render_task_prompt(records: list[Record], task_name: str) -> str:

@@ -57,7 +57,7 @@ To test a generic RLM control prompt derived from the package's original system 
 ```bash
 python benchmark_tests/oolong_pairs_rlm.py \
   --source pairs \
-  --pair-query paper_20 \
+  --pair-query task_20 \
   --limit 1 \
   --max-depth 2 \
   --custom-system-prompt-file prompts/rlm_system_prompt_depth2_v3.txt \
@@ -150,17 +150,17 @@ Open `trajectory_viewer/index.html` in a browser, then drop one of the JSONL
 files from `logs/` into the viewer.
 
 
-## OOLONG-Pairs Paper Tasks (1-20) on Local Synthetic Records
+## OOLONG-Pairs Benchmark Tasks (1-20) on Local Synthetic Records
 
-Generate verified answers and task JSONL (all 20 paper tasks):
+Generate verified answers and task JSONL (all 20 benchmark tasks):
 
 ```bash
-python recursive-bench/generate_oolong_pairs_verified_answers.py
+python recursive-bench/generate_task_answers.py
 ```
 
-For papers 1-5, this generator reads the answer key from the standalone
+For tasks 1-6, this generator reads the answer key from the standalone
 criterion scripts in `recursive-bench/answer-generators/`
-(`generate_task_01_answer.py` through `generate_task_05_answer.py`). The
+(`generate_task_01_answer.py` through `generate_task_06_answer.py`). The
 generated JSONL stores the script path in `metadata.answer_source`, and the RLM
 result JSONL copies it to `expected_answer_source`.
 
@@ -169,37 +169,29 @@ ordered as instructions, task prompt, then entries/data. Use `--prompt-out` to
 write that exact prompt as plain text for regular LLMs:
 
 ```bash
-python recursive-bench/task_prompt.py --task paper_20
-python recursive-bench/task_prompt.py --task paper_20 --prompt-out results/sample_paper_20_prompt.txt
-python recursive-bench/task_prompt.py --task paper_20 --run
+python recursive-bench/task_prompt.py --task task_20
+python recursive-bench/task_prompt.py --task task_20 --prompt-out results/sample_task_20_prompt.txt
+python recursive-bench/task_prompt.py --task task_20 --run
 ```
 
-The paper task prompt text is stored verbatim in
-`recursive-bench/oolong_pairs_paper_task_prompts.json`. Edit that file when the
-paper wording changes; the Python module keeps only the answer-verification
+The benchmark task prompt text is stored verbatim in
+`recursive-bench/benchmark_tasks.json`. Edit that file when the
+task wording changes; the Python module keeps only the answer-verification
 predicates.
 
-Verify a paper task exhaustively from the stored `correct_answer` and
-`correct_category` fields. This enumerates every user pair, records why it is
-included/excluded, and compares the computed answer to the generated answer
-file when present:
-
-```bash
-python recursive-bench/verify_oolong_pairs_task.py --task paper_20 --audit-json results/audits/paper_20.json --fail-on-mismatch
-```
-
-For papers 1-5, there are also standalone answer scripts that encode the
+For tasks 1-6, there are also standalone answer scripts that encode the
 prompt criterion directly, without using the shared task predicate:
 
 ```bash
-python recursive-bench/answer-generators/generate_task_01_answer.py --output results/paper_01_independent_answer.txt --audit-json results/audits/paper_01_independent.json --fail-on-mismatch
-python recursive-bench/answer-generators/generate_task_02_answer.py --output results/paper_02_independent_answer.txt --audit-json results/audits/paper_02_independent.json --fail-on-mismatch
-python recursive-bench/answer-generators/generate_task_03_answer.py --output results/paper_03_independent_answer.txt --audit-json results/audits/paper_03_independent.json --fail-on-mismatch
-python recursive-bench/answer-generators/generate_task_04_answer.py --output results/paper_04_independent_answer.txt --audit-json results/audits/paper_04_independent.json --fail-on-mismatch
-python recursive-bench/answer-generators/generate_task_05_answer.py --output results/paper_05_independent_answer.txt --audit-json results/audits/paper_05_independent.json --fail-on-mismatch
+python recursive-bench/answer-generators/generate_task_01_answer.py --output results/task_01_independent_answer.txt --audit-json results/audits/task_01_independent.json --fail-on-mismatch
+python recursive-bench/answer-generators/generate_task_02_answer.py --output results/task_02_independent_answer.txt --audit-json results/audits/task_02_independent.json --fail-on-mismatch
+python recursive-bench/answer-generators/generate_task_03_answer.py --output results/task_03_independent_answer.txt --audit-json results/audits/task_03_independent.json --fail-on-mismatch
+python recursive-bench/answer-generators/generate_task_04_answer.py --output results/task_04_independent_answer.txt --audit-json results/audits/task_04_independent.json --fail-on-mismatch
+python recursive-bench/answer-generators/generate_task_05_answer.py --output results/task_05_independent_answer.txt --audit-json results/audits/task_05_independent.json --fail-on-mismatch
+python recursive-bench/answer-generators/generate_task_06_answer.py --output results/task_06_independent_answer.txt --audit-json results/audits/task_06_independent.json --fail-on-mismatch
 ```
 
-Run all paper tasks against an RLM backend (OpenRouter by default):
+Run all benchmark tasks against an RLM backend (OpenRouter by default):
 
 ```bash
 python recursive-bench/run_recursive_bench.py --backend openrouter --model-name openai/gpt-5.4-mini

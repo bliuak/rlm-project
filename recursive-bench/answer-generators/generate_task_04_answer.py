@@ -12,7 +12,7 @@ from typing import Any
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_RECORDS_PATH = PROJECT_ROOT / "synthetic_user_records.json"
 DEFAULT_EXISTING_ANSWER = (
-    PROJECT_ROOT / "results" / "oolong_pairs_verified_answers" / "paper_04.txt"
+    PROJECT_ROOT / "results" / "oolong_pairs_verified_answers" / "task_04.txt"
 )
 
 CUTOFF = date(2023, 1, 6)
@@ -54,8 +54,8 @@ def group_records_by_user(items: list[dict[str, Any]]) -> dict[int, list[dict[st
     return {user: records_by_user[user] for user in sorted(records_by_user)}
 
 
-def user_satisfies_paper_04(records: list[dict[str, Any]]) -> bool:
-    """Encode paper_04 directly from the question text.
+def user_satisfies_task_04(records: list[dict[str, Any]]) -> bool:
+    """Encode task_04 directly from the question text.
 
     A user qualifies if:
     1. They have at least one entry whose answer label is human being OR location.
@@ -105,7 +105,7 @@ def user_audit(records: list[dict[str, Any]]) -> dict[str, Any]:
         "all_human_entries_after_2023_01_06": all(
             entry["is_after_2023_01_06"] for entry in human_entries
         ),
-        "qualifies": user_satisfies_paper_04(records),
+        "qualifies": user_satisfies_task_04(records),
         "target_entries": target_entries,
     }
 
@@ -114,7 +114,7 @@ def expected_pairs(records_by_user: dict[int, list[dict[str, Any]]]) -> list[tup
     qualifying_users = [
         user
         for user, records in records_by_user.items()
-        if user_satisfies_paper_04(records)
+        if user_satisfies_task_04(records)
     ]
     return list(combinations(qualifying_users, 2))
 
@@ -133,7 +133,7 @@ def build_audit(items: list[dict[str, Any]], compare_to: Path | None) -> dict[st
         for user, records in records_by_user.items()
     }
     return {
-        "task": "paper_04",
+        "task": "task_04",
         "criterion": (
             "Both users have at least one instance with a human being or location, "
             "and every human-being instance they have is strictly after 2023-01-06."
@@ -154,7 +154,7 @@ def build_audit(items: list[dict[str, Any]], compare_to: Path | None) -> dict[st
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Generate the paper_04 pair answer using a standalone encoding of the prompt criterion."
+        description="Generate the task_04 pair answer using a standalone encoding of the prompt criterion."
     )
     parser.add_argument("records", nargs="?", type=Path, default=DEFAULT_RECORDS_PATH)
     parser.add_argument("--output", type=Path, help="Write the computed answer text.")
@@ -180,7 +180,7 @@ def main() -> None:
         args.audit_json.parent.mkdir(parents=True, exist_ok=True)
         args.audit_json.write_text(json.dumps(audit, indent=2) + "\n", encoding="utf-8")
 
-    print(f"paper_04 pair_count={audit['pair_count']}")
+    print(f"task_04 pair_count={audit['pair_count']}")
     print(f"qualifying_users={audit['qualifying_users']}")
     print(f"compare_to_matches={audit['compare_to_matches']}")
     if not args.output:

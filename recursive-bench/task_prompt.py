@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from oolong_pairs_tasks import TASK_SPECS
-from generate_oolong_pairs_verified_answers import generate_task_rows, load_items
+from generate_task_answers import generate_task_rows, load_items
 
 
 DEFAULT_RECORDS_PATH = Path(__file__).resolve().parents[1] / "synthetic_user_records.json"
