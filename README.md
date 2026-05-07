@@ -191,8 +191,8 @@ python recursive-bench/answer-generators/generate_task_05_answer.py --output res
 python recursive-bench/answer-generators/generate_task_06_answer.py --output results/task_06_independent_answer.txt --audit-json results/audits/task_06_independent.json --fail-on-mismatch
 ```
 
-Run all benchmark tasks against an RLM backend (OpenRouter by default):
+Run all benchmark tasks against OpenRouter:
 
 ```bash
-python recursive-bench/run_recursive_bench.py --backend openrouter --model-name openai/gpt-5.4-mini
+python recursive-bench/run_recursive_bench.py --model-name openai/gpt-5.4-mini
 ```
