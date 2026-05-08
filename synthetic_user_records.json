@@ -909,6 +909,216 @@
       "record": "A virology lab tested three patient samples for antibodies against several viruses:\n- Sample 1: HIV, HPV, EBV\n- Sample 2: HPV, HSV, EBV\n- Sample 3: HPV, HSV, HBV\n\nDecision rule:\nIf exactly one virus is present in all three samples, report that virus.\nIf two or more viruses are present in all three samples, report the description: co-occurrence pattern.\n\nQuestion: What should be reported?",
       "correct_answer": "HPV",
       "correct_category": "abbreviation"
+    },
+    {
+      "date": "2014-08-22",
+      "user": 1274,
+      "record": "A robotics team prepares power packs for a scrimmage.\nThere are 9 robots, and each robot needs 4 packs.\nThe team also brings 11 spare packs.\nDuring testing, 8 packs fail inspection.\n\nDecision rule:\nIf the number of usable packs is divisible by 3, report the lab code: RPA.\nOtherwise, report the number of usable packs.\n\nQuestion: What should be reported?",
+      "correct_answer": "RPA",
+      "correct_category": "abbreviation"
+    },
+    {
+      "date": "2022-05-17",
+      "user": 1091,
+      "record": "A bakery starts with 2.4 kilograms of flour.\nEach batch of rolls uses 350 grams of flour.\nThe bakery makes 6 batches.\n\nDecision rule:\nIf at least 250 grams of flour remain, report the delivery city: Mendoza.\nOtherwise, report the number of grams remaining.\n\nQuestion: What should be reported?",
+      "correct_answer": "Mendoza",
+      "correct_category": "location"
+    },
+    {
+      "date": "2019-01-04",
+      "user": 1462,
+      "record": "A museum puzzle assigns point values to scanned color tags:\n- blue tag = 3 points\n- amber tag = 5 points\n- violet tag = 8 points\n\nA visitor scans one blue tag, one amber tag, and one violet tag.\n\nDecision rule:\nIf the total score is prime, report the artifact name: Astrolabe 7.\nOtherwise, report the curator: Maya Lin.\n\nQuestion: What should be reported?",
+      "correct_answer": "Maya Lin",
+      "correct_category": "human being"
+    },
+    {
+      "date": "2026-11-09",
+      "user": 1338,
+      "record": "Three drone teams submit approved landing zones:\n- Team North: pier, observatory, quarry, orchard\n- Team East: orchard, pier, tunnel, greenhouse\n- Team West: pier, orchard, archive, depot\n\nDecision rule:\nIf exactly two landing zones appear on all three lists, report the concept: route convergence.\nOtherwise, report the shared landing zone count.\n\nQuestion: What should be reported?",
+      "correct_answer": "route convergence",
+      "correct_category": "description and abstract concept"
+    },
+    {
+      "date": "2011-12-30",
+      "user": 1186,
+      "record": "A night ferry leaves Harbor A at 21:45 and arrives at Harbor B at 01:10 the next day.\n\nDecision rule:\nIf the trip lasted less than 200 minutes, report the port city: Tallinn.\nOtherwise, report the trip duration in minutes.\n\nQuestion: What should be reported?",
+      "correct_answer": "205 minutes",
+      "correct_category": "numeric value"
+    },
+    {
+      "date": "2024-07-03",
+      "user": 1407,
+      "record": "A warehouse uses this routing table:\n- If the final crate count is 0 to 20, route to Bay Gull\n- If the final crate count is 21 to 40, route to Bay Kestrel\n- If the final crate count is 41 to 60, route to Bay Heron\n\nA truck unloads 14 crates, then 19 crates, then removes 7 damaged crates.\n\nDecision rule:\nIf the route is Bay Kestrel, report the equipment model: Lifter-9.\nOtherwise, report the route name.\n\nQuestion: What should be reported?",
+      "correct_answer": "Lifter-9",
+      "correct_category": "entity"
+    },
+    {
+      "date": "2017-03-15",
+      "user": 1029,
+      "record": "A classroom scoreboard begins at 48 points.\nTeam A earns three 7-point bonuses.\nThen a penalty removes 10 points.\n\nDecision rule:\nIf the final score is exactly 59, report the student captain: Priya Nair.\nOtherwise, report the abbreviation: TQC.\n\nQuestion: What should be reported?",
+      "correct_answer": "Priya Nair",
+      "correct_category": "human being"
+    },
+    {
+      "date": "2020-10-28",
+      "user": 1495,
+      "record": "A theater has four rehearsal blocks:\n- Block A: 35 minutes\n- Block B: 50 minutes\n- Block C: 45 minutes\n- Block D: 40 minutes\n\nThe director schedules blocks B, D, and A in that order.\n\nDecision rule:\nIf the scheduled rehearsal time is more than 120 minutes, report the festival abbreviation: NFF.\nOtherwise, report the scheduled rehearsal time.\n\nQuestion: What should be reported?",
+      "correct_answer": "NFF",
+      "correct_category": "abbreviation"
+    },
+    {
+      "date": "2013-06-06",
+      "user": 1218,
+      "record": "A field station records temperatures at three checkpoints:\n- dawn: 11°C\n- noon: 24°C\n- dusk: 17°C\n\nA sensor flag is triggered when the range between the highest and lowest reading is greater than 10°C.\n\nDecision rule:\nIf the sensor flag is triggered, report the base location: Ushuaia.\nOtherwise, report the temperature range.\n\nQuestion: What should be reported?",
+      "correct_answer": "Ushuaia",
+      "correct_category": "location"
+    },
+    {
+      "date": "2025-02-18",
+      "user": 1143,
+      "record": "A puzzle box opens after three dials are set.\nThe rule says to multiply the first two dial values, then subtract the third.\nThe dial values are:\n- first dial: 6\n- second dial: 9\n- third dial: 14\n\nDecision rule:\nIf the result is at least 40, report the spacecraft name: Horizon Kite.\nOtherwise, report the result.\n\nQuestion: What should be reported?",
+      "correct_answer": "Horizon Kite",
+      "correct_category": "entity"
+    },
+    {
+      "date": "2014-08-22",
+      "user": 1187,
+      "record": "A bakery prepares 24 batches of cookies. Each batch yields 18 cookies. They sell 312 cookies and donate 47 to a shelter.\n\nDecision rule:\nIf the number of cookies remaining is at least 60, report the number remaining.\nOtherwise, report the bakery's nickname: Sugar Atelier.\n\nQuestion: What should be reported?",
+      "correct_answer": "73",
+      "correct_category": "numeric value"
+    },
+    {
+      "date": "2019-04-11",
+      "user": 1356,
+      "record": "A cargo ship departs Rotterdam on March 3, 2019, and arrives at its destination port on March 28, 2019.\n\nDecision rule:\nIf the voyage took fewer than 28 days, report the destination port: Singapore.\nOtherwise, report the shipping line abbreviation: MSC.\n\nQuestion: What should be reported?",
+      "correct_answer": "Singapore",
+      "correct_category": "location"
+    },
+    {
+      "date": "2022-09-30",
+      "user": 1089,
+      "record": "Three research papers list these co-authors:\n- Paper X: Rosalind Franklin, Jonas Salk, Barbara McClintock, Linus Pauling\n- Paper Y: Jonas Salk, Marie Curie, Niels Bohr, Rosalind Franklin\n- Paper Z: Linus Pauling, Barbara McClintock, Niels Bohr, Jonas Salk\n\nDecision rule:\nIf exactly one person appears on all three papers, report that person.\nOtherwise, report the concept \"authorship overlap\".\n\nQuestion: What should be reported?",
+      "correct_answer": "Jonas Salk",
+      "correct_category": "human being"
+    },
+    {
+      "date": "2016-07-08",
+      "user": 1422,
+      "record": "Four agencies co-funded a project:\n- Agency P contributed $4.2M (National Science Foundation)\n- Agency Q contributed $3.8M (European Research Council)\n- Agency R contributed $5.6M (Defense Advanced Research Projects Agency)\n- Agency S contributed $2.1M (Wellcome Trust)\n\nDecision rule:\nIf the largest single contribution exceeds $5M, report the abbreviation of the agency that gave it.\nOtherwise, report the project's headquarters city: Geneva.\n\nQuestion: What should be reported?",
+      "correct_answer": "DARPA",
+      "correct_category": "abbreviation"
+    },
+    {
+      "date": "2013-12-02",
+      "user": 1255,
+      "record": "A museum has four spacecraft exhibits with these features:\n- Exhibit 1: launched 1977, now beyond the heliopause\n- Exhibit 2: launched 1990, orbits Earth, optical telescope\n- Exhibit 3: launched 2011, rover operating on the Martian surface\n- Exhibit 4: launched 1969, carried the first humans to the lunar surface\n\nDecision rule:\nIf exactly one exhibit was launched after the year 2000 AND its operating location is not Earth orbit, report that spacecraft's name.\nOtherwise, report the curator's name: Helena Voss.\n\nQuestion: What should be reported?",
+      "correct_answer": "Curiosity",
+      "correct_category": "entity"
+    },
+    {
+      "date": "2020-05-17",
+      "user": 1101,
+      "record": "A factory recorded its quarterly output for one year:\n- Q1: 1200 units\n- Q2: 1180 units\n- Q3: 1150 units\n- Q4: 1090 units\n\nDecision rule:\nIf the output strictly decreases every quarter, report the underlying issue: production decline.\nIf the output is highest in Q4, report the plant location: Osaka.\nOtherwise, report the plant manager's surname: Tanaka.\n\nQuestion: What should be reported?",
+      "correct_answer": "production decline",
+      "correct_category": "description and abstract concept"
+    },
+    {
+      "date": "2017-03-14",
+      "user": 1480,
+      "record": "A surveyor measured three segments of a property boundary:\n- Segment 1: 4500 meters\n- Segment 2: 3.2 kilometers\n- Segment 3: 2750 meters\n\nDecision rule:\nIf the total boundary length exceeds 10 kilometers, report the total length in kilometers.\nOtherwise, report the surveying firm's abbreviation: NSPS.\n\nQuestion: What should be reported?",
+      "correct_answer": "10.45 kilometers",
+      "correct_category": "numeric value"
+    },
+    {
+      "date": "2025-01-26",
+      "user": 1167,
+      "record": "A logistics network shipped these package volumes on Tuesday:\n- Hub Alpha (Memphis): 1240 packages\n- Hub Beta (Louisville): 980 packages\n- Hub Gamma (Indianapolis): 1560 packages\n\nDecision rule:\nIf the median hub volume falls strictly between 1000 and 1500, report the city of the median hub.\nOtherwise, report the term \"load imbalance\".\n\nQuestion: What should be reported?",
+      "correct_answer": "Memphis",
+      "correct_category": "location"
+    },
+    {
+      "date": "2011-10-19",
+      "user": 1334,
+      "record": "An orchestra concert featured solos on three instruments described only as:\n- a stringed instrument tuned in fifths with four strings, played upright between the knees\n- a metal instrument played by extending a movable U-shaped slide\n- a tall wooden double-reed instrument with a folded body and a curved metal bocal\n\nDecision rule:\nIf exactly one of the three solos is from the brass family, report that brass instrument by name.\nOtherwise, report the conductor's surname: Mehta.\n\nQuestion: What should be reported?",
+      "correct_answer": "trombone",
+      "correct_category": "entity"
+    },
+    {
+      "date": "2023-06-08",
+      "user": 1278,
+      "record": "A regional electric grid recorded these voltage-sag incidents during one week:\n- Monday: substation 4\n- Wednesday: substation 7\n- Thursday: substation 4\n- Saturday: substation 11\n\nDecision rule:\nIf at least three distinct substations were affected AND the total number of incidents exceeds 3, report the underlying phenomenon: grid instability.\nIf only one substation was affected repeatedly, report that substation's town: Reading.\nOtherwise, report the regional operator code: PJM.\n\nQuestion: What should be reported?",
+      "correct_answer": "grid instability",
+      "correct_category": "description and abstract concept"
+    },
+    {
+      "date": "2016-04-11",
+      "user": 1426,
+      "record": "A studio keeps a prop checkout log:\n- Monday: red mask, brass compass, paper crane\n- Wednesday: brass compass, glass apple, red mask\n- Friday: brass compass, paper crane, glass apple\n\nDecision rule:\nIf exactly one prop appears in all three checkout lists, report that prop name.\nOtherwise, report the abbreviation: MISC.\n\nQuestion: What should be reported?",
+      "correct_answer": "brass compass",
+      "correct_category": "entity"
+    },
+    {
+      "date": "2023-09-02",
+      "user": 1048,
+      "record": "A clinic follows this callback rule:\n- If a form is received on Monday, Tuesday, or Wednesday, the callback is 2 business days later.\n- If a form is received on Thursday or Friday, the callback is the next Monday.\n\nA form is received on Wednesday.\n\nDecision rule:\nIf the callback day is Friday, report the physician: Elena Park.\nOtherwise, report the callback day.\n\nQuestion: What should be reported?",
+      "correct_answer": "Elena Park",
+      "correct_category": "human being"
+    },
+    {
+      "date": "2012-01-19",
+      "user": 1193,
+      "record": "A puzzle manual gives this symbol table:\n- crescent = north\n- triangle = west\n- square = east\n- circle = south\n\nA player reads the sequence: triangle, square, crescent.\nCancel any opposite-direction pair that appears anywhere in the sequence.\n\nDecision rule:\nIf exactly one direction remains after cancellation, report the location: Alaska.\nOtherwise, report the concept: directional conflict.\n\nQuestion: What should be reported?",
+      "correct_answer": "Alaska",
+      "correct_category": "location"
+    },
+    {
+      "date": "2020-06-27",
+      "user": 1365,
+      "record": "A badge printer uses these rules:\n- Names beginning with A through H receive blue badges.\n- Names beginning with I through Q receive silver badges.\n- Names beginning with R through Z receive green badges.\n\nThe submitted names are Noor, Rafael, and Hana.\nA badge color qualifies only if at least two submitted names receive that same color.\n\nDecision rule:\nIf a badge color qualifies, report the concept: cohort match.\nOtherwise, report the abbreviation: NBC.\n\nQuestion: What should be reported?",
+      "correct_answer": "NBC",
+      "correct_category": "abbreviation"
+    },
+    {
+      "date": "2018-12-08",
+      "user": 1017,
+      "record": "A ferry reservation uses this priority order:\n1. medical cargo\n2. refrigerated cargo\n3. mail cargo\n4. standard luggage\n\nThe manifest contains standard luggage, refrigerated cargo, and mail cargo.\n\nDecision rule:\nIf the highest-priority item present is refrigerated cargo, report the island city: Visby.\nOtherwise, report the highest-priority item present.\n\nQuestion: What should be reported?",
+      "correct_answer": "Visby",
+      "correct_category": "location"
+    },
+    {
+      "date": "2025-10-13",
+      "user": 1491,
+      "record": "A translation game uses this lookup table:\n- lune means moon\n- etoile means star\n- pont means bridge\n- arbre means tree\n\nThe clue says: report the English word for the French word that alphabetically comes first among lune, etoile, and pont.\n\nDecision rule:\nIf the English word is star, report the observatory name: Meridian Array.\nOtherwise, report the English word.\n\nQuestion: What should be reported?",
+      "correct_answer": "Meridian Array",
+      "correct_category": "entity"
+    },
+    {
+      "date": "2015-05-24",
+      "user": 1232,
+      "record": "A festival seating chart lists performers by stage:\n- Stage 1: Imani Cole, Theo Marsh, Lina Ortiz\n- Stage 2: Theo Marsh, Omar Vale, Imani Cole\n- Stage 3: Lina Ortiz, Imani Cole, Nia Brooks\n\nDecision rule:\nIf exactly one performer appears on all three stages, report that performer.\nOtherwise, report the concept: schedule overlap.\n\nQuestion: What should be reported?",
+      "correct_answer": "Imani Cole",
+      "correct_category": "human being"
+    },
+    {
+      "date": "2021-03-31",
+      "user": 1109,
+      "record": "A librarian files books using this rule:\n- If a title has more vowels than consonants, place it on the Echo shelf.\n- If a title has more consonants than vowels, place it on the Stone shelf.\n- If they are equal, place it on the Balance shelf.\n\nThe title to file is \"Orion\". Count only letters A, E, I, O, and U as vowels.\n\nDecision rule:\nIf the book goes on the Echo shelf, report the shelf code: ESF.\nOtherwise, report the shelf name.\n\nQuestion: What should be reported?",
+      "correct_answer": "ESF",
+      "correct_category": "abbreviation"
+    },
+    {
+      "date": "2010-09-16",
+      "user": 1384,
+      "record": "A route card says:\nStart at Cedar Gate.\nMove to the station whose name starts with the last letter of your current station:\n- Cedar Gate connects to Ember Dock\n- Ember Dock connects to Kestrel Yard\n- Kestrel Yard connects to Delta Pier\n\nAfter making exactly two moves, stop.\n\nDecision rule:\nIf the stopping station is Kestrel Yard, report the concept: chain routing.\nOtherwise, report the stopping station.\n\nQuestion: What should be reported?",
+      "correct_answer": "chain routing",
+      "correct_category": "description and abstract concept"
+    },
+    {
+      "date": "2026-02-05",
+      "user": 1306,
+      "record": "A lab labels samples by the median of three ranked signals.\nThe signal strengths are:\n- cobalt = 14\n- amber = 21\n- ivory = 17\n\nThe sample label is the color with the median signal strength.\n\nDecision rule:\nIf the sample label is ivory, report the signal value.\nOtherwise, report the sample label.\n\nQuestion: What should be reported?",
+      "correct_answer": "17",
+      "correct_category": "numeric value"
     }
   ]
 }
