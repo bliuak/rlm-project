@@ -13,6 +13,7 @@ PAIR_RE = re.compile(r"\((\d+)\s*,\s*(\d+)\)")
 DEFAULT_RECORDS_PATH = Path(__file__).resolve().parents[1] / "synthetic_user_records.json"
 FULL_RUN_DEPTHS = (1, 2)
 MAX_COMPLETION_RETRIES = 2
+RETRY_DELAY_SECONDS = 5
 
 
 def default_output_path() -> Path:
@@ -168,7 +169,7 @@ def run_task(
             except Exception as exc:
                 error = f"{type(exc).__name__}: {exc}"
                 if attempt < MAX_COMPLETION_RETRIES:
-                    time.sleep(1)
+                    time.sleep(RETRY_DELAY_SECONDS)
 
     output_pair_count = len(parse_pairs(actual))
     score = 0.0 if error else f1(actual, row["expected_answer"])
