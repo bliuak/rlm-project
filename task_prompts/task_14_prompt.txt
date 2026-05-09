@@ -1,0 +1,1519 @@
+Instructions:
+The following dataset contains 160 entries. Each entry has a date, a user ID, and a small reasoning problem ending with the question "What should be reported?" The reported value is not shown. To use an entry, first solve its reasoning problem and determine the reported value, then classify that reported value into one of 6 categories: description and abstract concept, entity, human being, numeric value, location, abbreviation.
+
+The category is based on the reported value, not on every noun or number mentioned in the prompt. For example, a reported city is a location, a reported person name is a human being, a reported number is a numeric value, a reported code or acronym is an abbreviation, a reported organization or named object is an entity, and a reported concept or descriptive phrase is a description and abstract concept.
+
+Users may have multiple entries. Pair questions ask about aggregate counts or existence of these inferred answer categories per user across all 160 entries. Do not guess. Calculate the exact answer from the entries.
+
+Prompt:
+In the above data, list all pairs of user IDs (no duplicate pairs, list lower ID first) such that one user has at least one instance with human being and at least one instance with numeric value, and the other user has exactly two instances with location. Each of the questions can be labelled as one of the labels (the data does not provide the labels, you need to figure out the label from the semantics of the question): description and abstract concept, entity, human being, numeric value, location, abbreviation. In your answer, list all pairs in the format (user_id_1, user_id_2), separated by newlines.
+
+Entries/data:
+Date: Apr 27, 2026 || User: 1000 || Instance: A clinic receives 7 trays of vaccine vials. Each tray holds 12 vials, and 9 vials are marked expired.
+
+Decision rule:
+If the number of usable vials is at least 70, report the health agency code: WHO.
+Otherwise, report the number of usable vials.
+
+Question: What should be reported?
+Date: Nov 04, 2026 || User: 1000 || Instance: A ferry leaves at 14:35 and arrives at 17:10 on the same day.
+
+Decision rule:
+If the trip lasted more than 160 minutes, report the arrival city: Dubrovnik.
+Otherwise, report the trip duration in minutes.
+
+Question: What should be reported?
+Date: May 15, 2010 || User: 1000 || Instance: Three training rosters list instructors:
+- Roster A: Iris Okafor, Mateo Silva, Noor Haddad
+- Roster B: Iris Okafor, Elena Rossi, Noor Haddad
+- Roster C: Iris Okafor, Jonas Meyer, Priya Nair
+
+Decision rule:
+If exactly one instructor appears on all three rosters, report that instructor.
+Otherwise, report the concept "roster conflict".
+
+Question: What should be reported?
+Date: Nov 22, 2010 || User: 1000 || Instance: A lift can carry at most 1,100 kilograms. Three pallets are listed:
+- Pallet A: 1.2 metric tons
+- Pallet B: 950 kilograms
+- Pallet C: 1,150 kilograms
+
+Decision rule:
+Find the heaviest pallet that does not exceed the lift limit. If it is Pallet B, report the airport code: LAX. If it is Pallet C, report the harbor city: Bergen. Otherwise, report "load mismatch".
+
+Question: What should be reported?
+Date: Jun 01, 2011 || User: 1000 || Instance: Start from 2024-02-26. Move forward 4 days to reach a target date.
+
+Decision rule:
+If the target date falls on a weekday, report the port city: Valparaiso.
+Otherwise, report the number of days moved forward.
+
+Question: What should be reported?
+Date: Dec 09, 2011 || User: 1000 || Instance: Routing notes:
+If a crate is sealed, it receives a blue tag.
+If a crate receives a blue tag, it is sent to the Reykjavik transfer station.
+The crate is sealed.
+
+Decision rule:
+If the transfer station can be concluded, report the transfer city: Reykjavik.
+Otherwise, report "routing ambiguity".
+
+Question: What should be reported?
+Date: Jun 17, 2012 || User: 1000 || Instance: A catering invoice has 18 adult meals at $14 each and 9 child meals at $8 each. A service credit subtracts $22 from the invoice.
+
+Decision rule:
+If the final invoice is greater than $300, report the booked venue: Solaris Archive.
+Otherwise, report the final invoice total in dollars.
+
+Question: What should be reported?
+Date: Dec 25, 2012 || User: 1000 || Instance: Sprint results:
+- Amara Voss: 58.4 seconds
+- Tobias Ren: 57.9 seconds
+- Celia Duarte: 58.1 seconds
+
+Decision rule:
+Find the fastest runner. If the fastest time is below 58.0 seconds, report that runner.
+Otherwise, report the concept "timing review".
+
+Question: What should be reported?
+Date: Jul 04, 2013 || User: 1000 || Instance: A lab thermometer reads 28 degrees Celsius. Convert the reading to Fahrenheit using F = C * 9/5 + 32.
+
+Decision rule:
+If the Fahrenheit reading is above 80, report the standards code: UNESCO.
+Otherwise, report the storage city: Marrakesh.
+
+Question: What should be reported?
+Date: Jan 11, 2014 || User: 1000 || Instance: Sequence: 4, 9, 16, 25, ...
+Find the next term assuming the numbers continue as consecutive perfect squares.
+
+Decision rule:
+If the next term is divisible by 3, report the next term.
+Otherwise, report the fallback city: Quito.
+
+Question: What should be reported?
+Date: Jun 03, 2026 || User: 1001 || Instance: A museum has 5 display cases. Each case can hold 14 artifacts, and 8 artifacts are temporarily on loan elsewhere.
+
+Decision rule:
+If the number of displayable artifacts is less than 60, report the concept "exhibit shortage".
+Otherwise, report the archive format code: HTML.
+
+Question: What should be reported?
+Date: Dec 11, 2026 || User: 1001 || Instance: A support call begins at 22:45 and lasts 95 minutes.
+
+Decision rule:
+If the call ends after midnight, report the service city: Innsbruck.
+Otherwise, report the call duration in minutes.
+
+Question: What should be reported?
+Date: Jun 21, 2010 || User: 1001 || Instance: A subscription bill starts with a $45 base charge. It adds 3 premium modules at $7 each, then applies a $6 credit.
+
+Decision rule:
+If the final bill is an even dollar amount, report the final bill in dollars.
+Otherwise, report the vehicle model: Orion Shuttle.
+
+Question: What should be reported?
+Date: Dec 29, 2010 || User: 1001 || Instance: Three project teams list required tools:
+- Team A: radar, lidar, sonar
+- Team B: lidar, sonar, GPS
+- Team C: lidar, sonar, thermal camera
+
+Decision rule:
+If exactly one tool appears on all three teams, report the mission asset: Harbor Lens.
+Otherwise, report the concept "tool overlap".
+
+Question: What should be reported?
+Date: Jul 08, 2011 || User: 1001 || Instance: Trail guide distances:
+- North spur: 3.4 kilometers
+- East spur: 2,800 meters
+- West spur: 3,100 meters
+
+Decision rule:
+Find the shortest spur after converting all distances to kilometers. If it is the East spur, report the destination: Kigali. If it is the West spur, report the code: UNESCO. Otherwise, report the guide: Selene Park.
+
+Question: What should be reported?
+Date: Jan 15, 2012 || User: 1001 || Instance: Start from 2021-09-29. Move forward 10 days to reach a target date.
+
+Decision rule:
+If the target date falls on a Saturday, report the launch vehicle: Mercury Atlas.
+Otherwise, report the number of days moved forward.
+
+Question: What should be reported?
+Date: Jul 24, 2012 || User: 1001 || Instance: Signal rules:
+If switch A is on, relay B becomes active.
+If relay B is active, the beacon receives a signal.
+Switch A is on.
+
+Decision rule:
+If the beacon receives a signal, report the beacon name: Nimbus Relay.
+Otherwise, report the numeric status value: 0.
+
+Question: What should be reported?
+Date: Jan 31, 2013 || User: 1001 || Instance: Invoice table:
+- Atlas invoice: due 2022-04-10
+- Northstar invoice: due 2022-04-08
+- Meridian invoice: due 2022-04-13
+
+Decision rule:
+Find the invoice with the earliest due date. If it is the Northstar invoice, report the vendor contact: Priya Nair. Otherwise, report the fallback city: Hobart.
+
+Question: What should be reported?
+Date: Aug 10, 2013 || User: 1001 || Instance: A survey records 48 yes votes out of 80 total responses.
+
+Decision rule:
+If the yes share is at least 60%, report the concept "majority approval".
+Otherwise, report the rail code: SNCF.
+
+Question: What should be reported?
+Date: Feb 17, 2014 || User: 1001 || Instance: A drone flies 2.5 kilometers east, then 750 meters west, then 1.25 kilometers east.
+
+Decision rule:
+If the net eastward distance is exactly 3 kilometers, report the net distance as "3 kilometers".
+Otherwise, report the destination city: Sapporo.
+
+Question: What should be reported?
+Date: Aug 22, 2015 || User: 1247 || Instance: A bakery produces 120 pastries on Monday, 80 on Tuesday, and 100 on Wednesday. Over the three days, they sell 75% of total production.
+
+Decision rule:
+If the number of unsold pastries is greater than 70, report the number of unsold pastries.
+Otherwise, report the bakery name: Maison Dorée.
+
+Question: What should be reported?
+Date: Mar 15, 2019 || User: 1893 || Instance: A flight departs at 14:35 and lands the same day at 19:10.
+
+Decision rule:
+If the flight duration is greater than 240 minutes, report the destination city: Reykjavik.
+Otherwise, report the airline code: DLH.
+
+Question: What should be reported?
+Date: Nov 07, 2022 || User: 1056 || Instance: Conference attendance log:
+- Day 1: Maria Chen, Kenji Tanaka, Olusegun Adebayo
+- Day 2: Maria Chen, Fatima al-Rashid
+- Day 3: Kenji Tanaka, Maria Chen
+
+Decision rule:
+If exactly one person attended on all three days, report that person.
+Otherwise, report the concept "scheduling conflict".
+
+Question: What should be reported?
+Date: Jun 30, 2017 || User: 1672 || Instance: A pipeline transports 0.9 cubic meters of water per minute. (1 cubic meter = 1000 liters.)
+
+Decision rule:
+If the hourly throughput exceeds 50,000 liters, report the operator code: AQU-7.
+Otherwise, report the hourly throughput in liters.
+
+Question: What should be reported?
+Date: Jan 19, 2023 || User: 1438 || Instance: Three machines use the following parts:
+- Machine 1: alpha-bolt, beta-clip, gamma-rod
+- Machine 2: beta-clip, delta-pin, gamma-rod
+- Machine 3: alpha-bolt, beta-clip, epsilon-spring
+
+Decision rule:
+If exactly one part appears in all three machines, report that part.
+Otherwise, report the concept "redundant inventory".
+
+Question: What should be reported?
+Date: Sep 04, 2014 || User: 1921 || Instance: Five projects have the following completion percentages:
+- Atlas: 78%
+- Borealis: 92%
+- Cygnus: 85%
+- Draco: 61%
+- Eros: 88%
+
+Decision rule:
+If the median project's completion percentage is above 80%, report the engineering principle: iterative refinement.
+Otherwise, report the name of the median project.
+
+Question: What should be reported?
+Date: Apr 12, 2025 || User: 1185 || Instance: A car rental costs $35 per day plus $0.20 per mile for every mile beyond the first 100 miles. A customer rents for 5 days and drives 380 miles total.
+
+Decision rule:
+If the total rental cost exceeds $200, report the total cost in dollars.
+Otherwise, report the rental company name: EuroCar.
+
+Question: What should be reported?
+Date: Oct 25, 2020 || User: 1764 || Instance: Three scientists each work at exactly one of three labs (Cambridge, MIT, Stanford), and each holds exactly one field (chemist, physicist, biologist). Known facts:
+- The chemist works at Cambridge.
+- Dr. Patel does not work at MIT.
+- The physicist works at MIT.
+- Dr. Okonkwo is the biologist.
+- Dr. Lindgren is not the chemist.
+
+Decision rule:
+If the person at Stanford is the biologist, report that person.
+Otherwise, report the concept "incomplete data".
+
+Question: What should be reported?
+Date: Jul 08, 2012 || User: 1502 || Instance: A satellite was launched on 2003-04-12. It operated for exactly 7 years and 9 months before decommissioning.
+
+Decision rule:
+If the calendar month of decommissioning is before July, report the satellite name: Helios-2.
+Otherwise, report the launch facility: Baikonur.
+
+Question: What should be reported?
+Date: Feb 28, 2024 || User: 1339 || Instance: A delivery vehicle completes a route in three legs of 45 km, 68 km, and 92 km.
+
+Decision rule:
+If the average distance per leg is less than 70 km, report the depot city: Marseille.
+Otherwise, report the total distance traveled in kilometers.
+
+Question: What should be reported?
+Date: Apr 22, 2019 || User: 1247 || Instance: A factory produces 24 units per hour for 7 hours, then 18 units per hour for the next 5 hours.
+
+Decision rule:
+If total production exceeds 250 units, report the labor federation: AFL-CIO.
+Otherwise, report the number of units produced.
+
+Question: What should be reported?
+Date: Aug 11, 2022 || User: 1583 || Instance: A flight departs at 14:35 and arrives at 19:50 the same day.
+
+Decision rule:
+If the flight took more than 300 minutes, report the destination city: Reykjavik.
+Otherwise, report the airline code: IAG.
+
+Question: What should be reported?
+Date: Oct 07, 2015 || User: 1098 || Instance: Three reading clubs publish their current roster:
+- Club X reads: Toni Morrison, Maya Angelou, James Baldwin
+- Club Y reads: James Baldwin, Octavia Butler, Toni Morrison
+- Club Z reads: Toni Morrison, Zora Neale Hurston, James Baldwin
+
+Decision rule:
+If exactly one author appears in all three clubs, report that author.
+If exactly two authors appear in all three clubs, report the concept "shared canon".
+Otherwise, report the head librarian: Helen Wilson.
+
+Question: What should be reported?
+Date: Mar 15, 2017 || User: 1721 || Instance: A recipe requires 2.5 kg of flour. The chef already has 800 grams in storage and buys 3 additional bags, each containing 750 grams.
+
+Decision rule:
+If the chef ends up with more than 400 grams beyond what the recipe requires, report the surplus in grams.
+Otherwise, report the supplier name: Goldmill Co.
+
+Question: What should be reported?
+Date: Sep 28, 2013 || User: 1456 || Instance: A museum catalog lists artifacts currently displayed in three halls:
+- Hall 1: Rosetta Stone, Elgin Marbles, Sutton Hoo Helmet
+- Hall 2: Standard of Ur, Rosetta Stone, Lewis Chessmen
+- Hall 3: Rosetta Stone, Cyrus Cylinder, Portland Vase
+
+Decision rule:
+If one artifact appears in every hall, report that artifact.
+Otherwise, report the museum founder: Hans Sloane.
+
+Question: What should be reported?
+Date: Dec 04, 2020 || User: 1834 || Instance: Three software projects credit their core contributors:
+- Project Alpha: Linus Torvalds, Brian Kernighan, Ken Thompson
+- Project Beta: Dennis Ritchie, Ken Thompson, Bjarne Stroustrup
+- Project Gamma: Ken Thompson, Guido van Rossum, Brian Kernighan
+
+Decision rule:
+If exactly one contributor appears on all three projects, report that contributor.
+Otherwise, report the standards body: IEEE.
+
+Question: What should be reported?
+Date: Jun 17, 2023 || User: 1192 || Instance: A car rental fleet records four vehicles' odometers:
+- Tesla Model 3: 42,000 miles
+- Ford F-150: 68,000 miles
+- Toyota Prius: 91,000 miles
+- Honda Civic: 55,000 miles
+
+Decision rule:
+If any vehicle has more than 90,000 miles, report the model with the highest mileage.
+Otherwise, report the total mileage across all four vehicles.
+
+Question: What should be reported?
+Date: May 30, 2016 || User: 1675 || Instance: A delivery route logs these timestamps on a single day:
+- Departure: 07:15
+- First stop: 08:45
+- Second stop: 10:20
+- Final stop: 13:35
+
+Decision rule:
+If the total elapsed time from departure to final stop exceeds 360 minutes, report the final destination city: Marrakech.
+Otherwise, report the total distance traveled: 245 km.
+
+Question: What should be reported?
+Date: Jan 19, 2024 || User: 1309 || Instance: A satellite mission has these mass components:
+- Bus structure: 1,250 kg
+- Onboard fuel: 320 kg
+- Scientific payload: 85 kg
+
+Decision rule:
+If the combined launch mass exceeds 1,500 kg, report the operating agency: ESA.
+Otherwise, report the launch site: Kourou.
+
+Question: What should be reported?
+Date: Jul 02, 2025 || User: 1928 || Instance: A factory records its daily defect rate over five consecutive days: 2.1%, 2.4%, 2.0%, 2.3%, and 2.2%.
+
+Decision rule:
+If the average defect rate across the five days is strictly below 2.5%, report the average rate.
+Otherwise, report the concept "quality concern".
+
+Question: What should be reported?
+Date: Jul 22, 2015 || User: 1145 || Instance: A factory produces 14 pallets per hour for 9 hours, then 11 pallets per hour for 5 hours.
+
+Decision rule:
+If the total number of pallets produced exceeds 200, report the chemical company code: BASF.
+Otherwise, report the total number of pallets produced.
+
+Question: What should be reported?
+Date: Mar 08, 2019 || User: 1283 || Instance: A research expedition departed on January 12 and returned on April 30 of the same non-leap year.
+
+Decision rule:
+If the expedition lasted more than 100 days, report the destination region: Patagonia.
+Otherwise, report the duration in days.
+
+Question: What should be reported?
+Date: Sep 17, 2022 || User: 1567 || Instance: Three project teams have these members:
+- Team Alpha: Marie Curie, Rosalind Franklin, Dorothy Hodgkin
+- Team Beta: Lise Meitner, Marie Curie, Barbara McClintock
+- Team Gamma: Dorothy Hodgkin, Chien-Shiung Wu, Marie Curie
+
+Decision rule:
+If exactly one person appears on all three teams, report that person.
+If two or more people appear on all three teams, report the institution: CERN.
+Otherwise, report the concept 'roster mismatch'.
+
+Question: What should be reported?
+Date: Nov 05, 2017 || User: 1402 || Instance: A cargo plane travels 4,800 kilometers in 5 hours of constant flight.
+
+Decision rule:
+If the average speed exceeds 900 km/h, report the airline code: KLM.
+Otherwise, report the average speed in km/h.
+
+Question: What should be reported?
+Date: May 30, 2023 || User: 1819 || Instance: Four spacecraft and their launch years:
+- Voyager 1: 1977
+- Cassini: 1997
+- Juno: 2011
+- New Horizons: 2006
+
+Decision rule:
+Identify the spacecraft whose launch year is closest to the year 2000.
+If that spacecraft was launched before the year 2000, report the spacecraft.
+Otherwise, report the launch site: Cape Canaveral.
+
+Question: What should be reported?
+Date: Aug 19, 2014 || User: 1655 || Instance: A water reservoir holds 60,000 liters at the start of the week.
+Daily water consumption: 9,500 liters.
+Daily inflow from rain: 4,200 liters.
+The reservoir is observed after exactly 7 full days.
+
+Decision rule:
+If the reservoir has less than 30,000 liters remaining, report the concept 'water scarcity'.
+If the reservoir has between 30,000 and 50,000 liters remaining (inclusive), report the city: Marrakech.
+Otherwise, report the remaining volume in liters.
+
+Question: What should be reported?
+Date: Dec 04, 2020 || User: 1390 || Instance: Five mountain heights, in meters:
+- Peak A: 4,807
+- Peak B: 5,642
+- Peak C: 4,478
+- Peak D: 5,895
+- Peak E: 4,810
+
+Decision rule:
+Find the height of the third tallest peak in the list.
+If that height exceeds 5,000 meters, report the mountaineer: Reinhold Messner.
+Otherwise, report that height in meters.
+
+Question: What should be reported?
+Date: Jun 11, 2016 || User: 1721 || Instance: Office desk capacity by branch:
+- Hamburg: 240 desks
+- Bordeaux: 180 desks
+- Trondheim: 95 desks
+- Valencia: 310 desks
+- Tampere: 145 desks
+
+Decision rule:
+Identify the branch whose desk capacity is nearest to 200.
+If that branch has more than 200 desks, report the architect: Zaha Hadid.
+Otherwise, report the branch city.
+
+Question: What should be reported?
+Date: Oct 07, 2013 || User: 1234 || Instance: A literature award log:
+- 1995: Wisława Szymborska
+- 1999: Günter Grass
+- 2001: V.S. Naipaul
+- 2004: Elfriede Jelinek
+- 2007: Doris Lessing
+
+Decision rule:
+Identify each laureate whose award year is divisible by 4.
+If exactly one laureate qualifies, report that laureate.
+If two or more qualify, report the prize: Nobel.
+If none qualify, report the concept 'no eligible laureate'.
+
+Question: What should be reported?
+Date: Feb 14, 2025 || User: 1976 || Instance: A museum has these objects on display, with their masses:
+- Apollo Lunar Module: 4,700 kg
+- Sputnik 1: 84 kg
+- Mars Rover Curiosity: 899 kg
+- Hubble Space Telescope: 11,110 kg
+- ISS Zvezda Module: 19,050 kg
+
+Decision rule:
+Identify the displayed object whose mass is closest to 1,000 kg.
+If that object's mass is strictly below 1,000 kg, report the object.
+Otherwise, report the museum operator: Smithsonian.
+
+Question: What should be reported?
+Date: Aug 15, 2022 || User: 1247 || Instance: A bakery prepares 12 trays of muffins. Each tray holds 8 muffins. By closing time, 73 muffins have been sold.
+
+Decision rule:
+If the number of unsold muffins is greater than 20, report the destination city of the leftover shipment: Geneva.
+Otherwise, report the number of unsold muffins.
+
+Question: What should be reported?
+Date: Mar 22, 2019 || User: 1583 || Instance: A flight departs JFK at 14:40 local time and arrives at LAX at 18:15 local time. New York is 3 hours ahead of Los Angeles.
+
+Decision rule:
+If the actual flight duration exceeds 380 minutes, report the airline code: UAL.
+Otherwise, report the duration in minutes.
+
+Question: What should be reported?
+Date: Nov 08, 2023 || User: 1815 || Instance: Three book clubs share members:
+- Club Alpha: Marie Curie, Rosalind Franklin, Lise Meitner
+- Club Beta: Marie Curie, Lise Meitner, Dorothy Hodgkin
+- Club Gamma: Marie Curie, Lise Meitner, Barbara McClintock
+
+Decision rule:
+If exactly two people appear in all three clubs, report the alphabetically first one of those two by full name.
+Otherwise, report the concept "membership overlap".
+
+Question: What should be reported?
+Date: May 12, 2016 || User: 1102 || Instance: A car travels 240 km in 3 hours. It then travels another 120 km in 1.5 hours.
+
+Decision rule:
+If the average speed for the entire trip exceeds 85 km/h, report the driver's name: Carlos Mendez.
+Otherwise, report the average speed in km/h.
+
+Question: What should be reported?
+Date: Oct 04, 2014 || User: 1421 || Instance: A museum lists artifacts by year acquired:
+- 1985: Bronze Helmet
+- 1992: Silver Chalice
+- 2001: Iron Sword
+- 2008: Gold Brooch
+- 2015: Marble Statue
+
+Decision rule:
+If the artifact acquired exactly 23 years before 2015 has a name that contains a metal, report that artifact.
+Otherwise, report the city: Florence.
+
+Question: What should be reported?
+Date: Jan 30, 2025 || User: 1739 || Instance: A research lab tracks four projects:
+- Project P: 12 samples at 75% yield
+- Project Q: 20 samples at 65% yield
+- Project R: 8 samples at 90% yield
+- Project S: 15 samples at 80% yield
+
+Decision rule:
+If the project producing the highest absolute number of successful samples has a yield below 80%, report the cause: "yield discrepancy".
+Otherwise, report the project name.
+
+Question: What should be reported?
+Date: Jul 19, 2017 || User: 1956 || Instance: A delivery truck visits cities in this order: Madrid -> Barcelona -> Marseille -> Genoa -> Rome.
+Leg distances: Madrid-Barcelona 620 km, Barcelona-Marseille 365 km, Marseille-Genoa 415 km, Genoa-Rome 510 km.
+
+Decision rule:
+If the total distance exceeds 1900 km, report the final city: Rome.
+Otherwise, report the total distance.
+
+Question: What should be reported?
+Date: Sep 11, 2020 || User: 1387 || Instance: An error code lookup table:
+- error 101 -> AUTH
+- error 102 -> DBMS
+- error 103 -> HTTP
+- error 104 -> JSON
+- error 105 -> CORS
+A system reports errors 101, 103, and 104.
+
+Decision rule:
+If exactly one of the reported errors maps to an abbreviation whose second letter is a vowel, report that abbreviation.
+Otherwise, report the concept "system anomaly".
+
+Question: What should be reported?
+Date: Apr 26, 2013 || User: 1198 || Instance: A conference schedules five 1-hour talks beginning at 09:00, with no breaks between them:
+- Slot 1: Tim Berners-Lee
+- Slot 2: Vint Cerf
+- Slot 3: Linus Torvalds
+- Slot 4: Margaret Hamilton
+- Slot 5: Donald Knuth
+
+Decision rule:
+If the speaker whose slot begins at exactly 12:00 led software development for the Apollo guidance computer, report that person.
+Otherwise, report the concept "scheduling conflict".
+
+Question: What should be reported?
+Date: Dec 07, 2018 || User: 1644 || Instance: A fruit basket contains 14 apples, 9 oranges, 22 grapes, and 6 pears. A staff member removes 7 grapes and 3 apples.
+
+Decision rule:
+If the remaining grapes outnumber the combined remaining apples and oranges, report the city: Athens.
+Otherwise, report the total number of remaining fruit pieces.
+
+Question: What should be reported?
+Date: Feb 18, 2021 || User: 1859 || Instance: A company tracks four projects:
+- Project Helios: started 2018, ended 2021
+- Project Atlas: started 2019, ended 2023
+- Project Orion: started 2017, ended 2022
+- Project Vega: started 2020, still ongoing
+
+Decision rule:
+Consider only projects that have ended. If the longest one lasted exactly 5 years, report that project.
+Otherwise, report the concept "duration mismatch".
+
+Question: What should be reported?
+Date: Aug 23, 2015 || User: 1276 || Instance: A weather station records daily highs over five days: 19 C, 22 C, 24 C, 23 C, 25 C.
+
+Decision rule:
+If the average daily high exceeds 21 C, report the concept "heat wave".
+Otherwise, report the maximum temperature converted to Fahrenheit.
+
+Question: What should be reported?
+Date: Jun 30, 2011 || User: 1471 || Instance: A flight manifest:
+- Flight A: 142 passengers, staffed at 2 crew per 30 passengers, departs DXB
+- Flight B: 89 passengers, staffed at 1 crew per 25 passengers, departs IST
+- Flight C: 210 passengers, staffed at 1 crew per 35 passengers, departs LHR
+
+Decision rule:
+If the flight with the highest crew-to-passenger ratio departs from a city in the United Kingdom, report that city.
+Otherwise, report its departure airport code.
+
+Question: What should be reported?
+Date: Apr 14, 2024 || User: 1933 || Instance: A logistics network reports current stock:
+- Warehouse 1: 480 items
+- Warehouse 2: 215 items
+- Warehouse 3: 367 items
+An equal-distribution target is computed by dividing the total stock evenly across all three warehouses.
+
+Decision rule:
+If the sum of shortfalls (only counting warehouses below the equal-distribution target) exceeds 100 items, report the concept "supply imbalance".
+Otherwise, report the total current items.
+
+Question: What should be reported?
+Date: Sep 05, 2023 || User: 1018 || Instance: A class records four test scores per student:
+- Anna Reyes: 87, 92, 78, 93
+- Boris Kovac: 81, 85, 88, 90
+- Clara Petrov: 95, 89, 92, 88
+- Dimitri Solas: 76, 82, 90, 84
+
+Decision rule:
+If the student with the highest average is also the student with the highest single score, report that student's full name.
+Otherwise, report the concept "ranking divergence".
+
+Question: What should be reported?
+Date: Nov 21, 2019 || User: 1306 || Instance: A bookstore inventory:
+- Fiction: 150 copies
+- Non-fiction: 98 copies
+- Reference: 32 copies
+- Children's: 76 copies
+A shipment leaves removing 30% of fiction copies, 50 non-fiction copies, and 12 reference copies. Children's stock is unchanged.
+
+Decision rule:
+If the new total inventory is below 250 copies, report the city: Boston.
+Otherwise, report the new total inventory.
+
+Question: What should be reported?
+Date: Mar 08, 2016 || User: 1779 || Instance: Five lab elements (A, B, C, D, E) must be placed in positions 1 through 5 according to these clues:
+- D is in position 1
+- C is in position 5
+- B is somewhere after D
+- E is in the position immediately before B
+- A is in the position immediately before C
+
+Decision rule:
+If the element in position 3 is B, report the formal element name: Catalyst-B.
+Otherwise, report the concept "ordering error".
+
+Question: What should be reported?
+Date: Jul 14, 2012 || User: 1542 || Instance: A historical timeline lists:
+- Event X: 1492
+- Event Y: 1776
+- Event Z: 1865
+- Event W: 1969
+- Event V: 1989
+
+Decision rule:
+Identify the event whose year is closest to the year 1800. If that event occurred before 1800, report the concept "pre-industrial milestone".
+Otherwise, report the year of that event.
+
+Question: What should be reported?
+Date: May 09, 2026 || User: 1163 || Instance: A 5-day travel itinerary:
+- Day 1: Vienna
+- Day 2: Bratislava
+- Day 3: Budapest
+- Day 4: Belgrade
+- Day 5: Sofia
+A traveler arrives 3 days late and begins the itinerary at the city scheduled for Day 4 (skipping the earlier days).
+
+Decision rule:
+If the first city the traveler actually visits is a capital located on the Balkan Peninsula, report that city.
+Otherwise, report the concept "itinerary disruption".
+
+Question: What should be reported?
+Date: Oct 15, 2010 || User: 1888 || Instance: A satellite passes overhead every 96 minutes. Its first pass on a given day occurs at 03:00.
+
+Decision rule:
+If the satellite's 5th pass of the day occurs after 09:00, report the operations center code: ESOC.
+Otherwise, report the time of the 5th pass in HH:MM format.
+
+Question: What should be reported?
+Date: Apr 27, 2022 || User: 1428 || Instance: A garden has three beds:
+- Bed Alpha: 24 roses, 18 tulips, 0 lilies
+- Bed Beta: 8 roses, 12 tulips, 30 lilies
+- Bed Gamma: 15 roses, 25 tulips, 20 lilies
+
+Decision rule:
+If the bed with the most tulips is also the bed with the most lilies, report the head gardener: Henrietta Wells.
+Otherwise, report the total number of roses across all beds.
+
+Question: What should be reported?
+Date: Dec 19, 2017 || User: 1655 || Instance: A library catalog:
+- ID 4521: "The Iliad" by Homer (Ancient Greek)
+- ID 7832: "Hamlet" by Shakespeare (British)
+- ID 9104: "1984" by Orwell (British)
+- ID 6273: "Frankenstein" by Shelley (British)
+- ID 8956: "Beloved" by Morrison (American)
+A scanner computes a target ID as: (4521 + 5832 - 2521).
+
+Decision rule:
+If the resulting ID matches a book in the catalog whose author is British, report that book's title.
+Otherwise, report the concept "catalog miss".
+
+Question: What should be reported?
+Date: Feb 11, 2014 || User: 1077 || Instance: A network has 8 servers. The initial system load is 25%. Each server failure increases the load by 12 percentage points. All 8 servers eventually fail.
+
+Decision rule:
+If the system load after all 8 failures exceeds 110%, report the protocol abbreviation: TCP.
+Otherwise, report the final load percentage.
+
+Question: What should be reported?
+Date: Aug 03, 2025 || User: 1512 || Instance: A factory inspects three widget batches:
+- Type Alpha: 240 units, 15 defective
+- Type Beta: 180 units, 9 defective
+- Type Gamma: 320 units, 32 defective
+Quality threshold: defect rate must be at most 5%.
+
+Decision rule:
+If exactly two of the three types meet the quality threshold, report the concept "partial quality compliance".
+Otherwise, report the total number of non-defective widgets across all three types.
+
+Question: What should be reported?
+Date: Jun 22, 2020 || User: 1349 || Instance: Three chefs are scored by 5 judges:
+- Chef Marco Bellini: 85, 88, 90, 87, 92
+- Chef Yuki Tanaka: 89, 91, 88, 92, 90
+- Chef Anya Sokolov: 87, 90, 86, 88, 89
+For each chef, the highest and lowest of their five scores are dropped, and the remaining three are averaged to give an adjusted average.
+
+Decision rule:
+If the chef with the highest adjusted average is Yuki, report her full name: Yuki Tanaka.
+Otherwise, report the concept "judging variability".
+
+Question: What should be reported?
+Date: Mar 22, 2015 || User: 1547 || Instance: A baker prepares 12 trays of muffins. Each tray holds 8 muffins. After baking, 5 muffins are discarded as burnt.
+
+Decision rule:
+If the number of usable muffins is greater than 100, report the bakery name: Sunrise Bakery.
+Otherwise, report the number of usable muffins.
+
+Question: What should be reported?
+Date: Jul 08, 2019 || User: 1823 || Instance: A flight departs at 14:30 and arrives at 17:45 the same day.
+
+Decision rule:
+If the flight duration is less than 200 minutes, report the airline code: KLM.
+Otherwise, report the destination city: Amsterdam.
+
+Question: What should be reported?
+Date: Nov 15, 2022 || User: 1234 || Instance: A weather log records the following morning temperatures:
+- Oslo: -5°C
+- Madrid: 12°C
+- Cairo: 22°C
+- Reykjavik: -8°C
+
+Decision rule:
+If the lowest temperature recorded is below -7°C, report the city with the lowest temperature.
+Otherwise, report the concept "mild winter".
+
+Question: What should be reported?
+Date: Sep 04, 2017 || User: 1689 || Instance: Three research teams are listed:
+- Team Alpha: Marie Curie, Niels Bohr, Richard Feynman
+- Team Beta: Niels Bohr, Lise Meitner, Werner Heisenberg
+- Team Gamma: Niels Bohr, Marie Curie, Lise Meitner
+
+Decision rule:
+If exactly one person appears on all three teams, report that person.
+Otherwise, report the concept "team mismatch".
+
+Question: What should be reported?
+Date: May 12, 2023 || User: 1456 || Instance: A spacecraft launch profile lists payload mass of 850 kg and target altitude of 420 km.
+
+Decision rule:
+If the payload is less than 1000 kg AND the target altitude is greater than 400 km, report the rocket name: Falcon 9.
+Otherwise, report the launch site: Cape Canaveral.
+
+Question: What should be reported?
+Date: Feb 28, 2020 || User: 1901 || Instance: A factory produced 1200 units in January and 1450 units in February. The monthly target was 1500 units.
+
+Decision rule:
+If both months met or exceeded the target, report the factory ID: PLT-7.
+Otherwise, report the underlying issue: production shortfall.
+
+Question: What should be reported?
+Date: Aug 19, 2016 || User: 1378 || Instance: A pipeline transports 4500 liters of fluid per hour. Note: 1000 liters equals 1 cubic meter.
+
+Decision rule:
+If the flow rate exceeds 5 cubic meters per hour, report the pipeline operator code: GAZ-PRM.
+Otherwise, report the flow rate in cubic meters per hour.
+
+Question: What should be reported?
+Date: Dec 03, 2021 || User: 1112 || Instance: Marathon finish times:
+- Anna Schmidt: 2:14:33
+- Pedro Alvarez: 2:13:58
+- Yuki Tanaka: 2:15:01
+- Hassan Ali: 2:13:45
+
+Decision rule:
+If the winner finished in under 2 hours and 14 minutes, report the winner.
+Otherwise, report the venue: Berlin Olympic Stadium.
+
+Question: What should be reported?
+Date: Jun 21, 2014 || User: 1755 || Instance: A cargo ship carries 240 containers. Customs flags 40% of them for inspection.
+
+Decision rule:
+If more than 90 containers are flagged for inspection, report the destination port: Rotterdam.
+Otherwise, report the number of flagged containers.
+
+Question: What should be reported?
+Date: Apr 17, 2018 || User: 1290 || Instance: A contract was signed on 2018-01-15 and expires on 2018-09-20.
+
+Decision rule:
+If the period from signing to expiration exceeds 250 days, report the legal firm: Hartwell & Sons.
+Otherwise, report the number of days from signing to expiration.
+
+Question: What should be reported?
+Date: Jan 30, 2025 || User: 1605 || Instance: Three joint Mars missions list participating space agencies:
+- Mission X: NASA, ESA, ISRO
+- Mission Y: NASA, JAXA, ISRO
+- Mission Z: NASA, ESA, JAXA
+
+Decision rule:
+If exactly one agency appears in all three missions, report its abbreviation.
+Otherwise, report the planet: Mars.
+
+Question: What should be reported?
+Date: Oct 09, 2013 || User: 1844 || Instance: A museum lists three exhibits: paintings (45 items), sculptures (28 items), photographs (31 items).
+
+Decision rule:
+If sculptures form the smallest exhibit by item count, report the museum's most famous painting: Starry Night.
+Otherwise, report the curator: Eleanor Frost.
+
+Question: What should be reported?
+Date: Mar 14, 2026 || User: 1027 || Instance: A beverage survey of 500 respondents finds 312 prefer tea and 188 prefer coffee.
+
+Decision rule:
+If tea preference exceeds 60% of all respondents, report the tea-growing region: Darjeeling.
+Otherwise, report the total number of respondents.
+
+Question: What should be reported?
+Date: Jul 22, 2012 || User: 1466 || Instance: A reservoir holds 80,000 cubic meters of water. Daily consumption averages 2,500 cubic meters; daily inflow averages 2,200 cubic meters.
+
+Decision rule:
+If the reservoir level rises over time on average, report the dam name: Hoover Dam.
+Otherwise, report the underlying problem.
+
+Question: What should be reported?
+Date: Nov 26, 2019 || User: 1538 || Instance: Biographical record: a composer was born on 1756-01-27 and died on 1791-12-05.
+
+Decision rule:
+If the composer lived fewer than 40 full years, report the composer: Wolfgang Amadeus Mozart.
+Otherwise, report the city of death: Vienna.
+
+Question: What should be reported?
+Date: Mar 22, 2015 || User: 1547 || Instance: A bakery produces 240 loaves on Monday, 185 loaves on Tuesday, and 312 loaves on Wednesday.
+A delivery truck removes 145 loaves on Wednesday afternoon.
+
+Decision rule:
+If the total remaining loaves at the end of Wednesday is greater than 600, report the bakery's hometown: Vienna.
+Otherwise, report the number of remaining loaves.
+
+Question: What should be reported?
+Date: Aug 11, 2019 || User: 1823 || Instance: A package was shipped on March 14, 2019 and delivered on March 28, 2019.
+
+Decision rule:
+If the delivery took more than 10 days, report the warehouse city: Rotterdam.
+Otherwise, report the courier abbreviation: DHL.
+
+Question: What should be reported?
+Date: May 07, 2022 || User: 1156 || Instance: An award nomination tally shows:
+- Category A: Maya Chen (38 votes), Tomas Reyes (42 votes), Priya Singh (29 votes)
+- Category B: Maya Chen (35 votes), Tomas Reyes (51 votes), Priya Singh (47 votes)
+
+Decision rule:
+If the same nominee leads both categories, report that nominee.
+Otherwise, report the concept "split decision".
+
+Question: What should be reported?
+Date: Nov 19, 2017 || User: 1992 || Instance: Three departments submit project codes:
+- Engineering: ALPHA, BETA, GAMMA
+- Marketing: BETA, DELTA, EPSILON
+- Operations: BETA, GAMMA, EPSILON
+
+Decision rule:
+If exactly one project code appears in all three department lists, report that code.
+Otherwise, report the team lead: Hannah Park.
+
+Question: What should be reported?
+Date: Sep 14, 2023 || User: 1378 || Instance: A pipeline transports 3200 liters per hour for 8 hours.
+
+Decision rule:
+If the total volume exceeds 30 cubic meters, report the operator company code: GAZP.
+Otherwise, report the total volume in cubic meters.
+
+Question: What should be reported?
+Date: Apr 02, 2014 || User: 1689 || Instance: A telescope observation log:
+- 21:15 observed Mars
+- 21:42 observed Jupiter
+- 22:03 observed Saturn
+- 22:35 observed Venus
+
+Decision rule:
+If the third object observed has rings, report that object's name.
+Otherwise, report the observatory: Mauna Kea.
+
+Question: What should be reported?
+Date: Jul 30, 2020 || User: 1245 || Instance: A factory's quality check found 42 defective widgets out of a batch of 500.
+
+Decision rule:
+If the defect rate exceeds 5%, report the underlying concept: "manufacturing drift".
+Otherwise, report the lead inspector: Carlos Mendez.
+
+Question: What should be reported?
+Date: Dec 08, 2016 || User: 1834 || Instance: A flight schedule:
+- Flight 401 departs from Doha to Mumbai
+- Flight 502 departs from Mumbai to Singapore
+- Flight 603 departs from Singapore to Tokyo
+
+A passenger takes flight 401, then connects to flight 502, and disembarks.
+
+Decision rule:
+If the passenger's final stop in this sequence is in South Asia, report the airline code: AI.
+Otherwise, report the passenger's final stop city.
+
+Question: What should be reported?
+Date: Feb 26, 2021 || User: 1467 || Instance: A meeting started at 14:25 and ended at 16:50.
+
+Decision rule:
+If the meeting lasted longer than 2 hours, report the duration in minutes.
+Otherwise, report the chair's name: Dr. Lin.
+
+Question: What should be reported?
+Date: Jun 15, 2018 || User: 1102 || Instance: Three book clubs share their reading lists:
+- Club Alpha: Toni Morrison, Haruki Murakami, Chimamanda Adichie
+- Club Beta: Haruki Murakami, Kazuo Ishiguro, Toni Morrison
+- Club Gamma: Toni Morrison, Yasunari Kawabata, Yukio Mishima
+
+Decision rule:
+If exactly two authors appear in all three clubs, report the venue city: Edinburgh.
+If exactly one author appears in all three clubs, report that author.
+Otherwise, report the abbreviation: NA.
+
+Question: What should be reported?
+Date: Jan 18, 2025 || User: 1721 || Instance: A research team measures 95 samples on day 1, 108 samples on day 2, and 112 samples on day 3.
+
+Decision rule:
+If the average daily samples is at least 100, report the funding agency: NIH.
+Otherwise, report the total number of samples collected.
+
+Question: What should be reported?
+Date: Oct 21, 2013 || User: 1554 || Instance: A museum acquired an artifact on January 15, 2008 and another on November 22, 2012.
+
+Decision rule:
+If the gap between the two acquisitions is more than 4 years, report the more recent artifact: Antikythera Mechanism.
+Otherwise, report the head curator: Helena Voss.
+
+Question: What should be reported?
+Date: Aug 05, 2024 || User: 1873 || Instance: A patient's vitals across three readings:
+- Reading 1: heart rate 72, blood pressure 120/80
+- Reading 2: heart rate 88, blood pressure 135/85
+- Reading 3: heart rate 105, blood pressure 148/92
+
+Decision rule:
+If the heart rate increased strictly across every consecutive reading, report the medical concept: "tachycardia progression".
+Otherwise, report the attending physician: Dr. Aamir Khan.
+
+Question: What should be reported?
+Date: May 13, 2012 || User: 1396 || Instance: A logistics record for Container X:
+- origin port code: HKG
+- transfer port code: SIN
+- delivery port code: ROT
+
+The port codes correspond to: HKG = Hong Kong, SIN = Singapore, ROT = Rotterdam.
+
+Decision rule:
+If the container crossed at least two continents between origin and delivery, report the delivery city.
+Otherwise, report the shipping company: Maersk.
+
+Question: What should be reported?
+Date: Mar 10, 2026 || User: 1612 || Instance: A coding bootcamp has three cohorts:
+- Cohort A has 24 students
+- Cohort B has 31 students
+- Cohort C has 19 students
+
+8 students from Cohort A are also in Cohort B.
+3 students from Cohort B are also in Cohort C.
+No students are cross-enrolled between Cohorts A and C, and no student is in all three cohorts.
+
+Decision rule:
+If the total number of unique students is greater than 70, report the bootcamp name: CodeForge.
+Otherwise, report the number of unique students.
+
+Question: What should be reported?
+Date: Mar 22, 2015 || User: 1247 || Instance: A bakery prepares 12 trays of muffins. Each tray holds 24 muffins.
+During the day, 200 muffins are sold and 15 are given away as samples.
+
+Decision rule:
+If the number of muffins remaining is greater than 80, report the city of distribution: Reykjavik.
+Otherwise, report the number of muffins remaining.
+
+Question: What should be reported?
+Date: Aug 14, 2019 || User: 1583 || Instance: A flight departs at 14:35 and lands the same day at 19:50 (local times, same time zone).
+
+Decision rule:
+If the flight duration is greater than 300 minutes, report the airline code: KLM.
+Otherwise, report the destination city: Amsterdam.
+
+Question: What should be reported?
+Date: May 11, 2022 || User: 1879 || Instance: Three research teams have the following members:
+- Team Alpha: Marie Curie, Carl Sagan, Rosalind Franklin
+- Team Beta: Carl Sagan, Niels Bohr, Marie Curie
+- Team Gamma: Carl Sagan, Werner Heisenberg, Linus Pauling
+
+Decision rule:
+If exactly one person appears on all three teams, report that person.
+Otherwise, report the concept "scheduling conflict".
+
+Question: What should be reported?
+Date: Nov 30, 2017 || User: 1356 || Instance: A pipeline transports 4500 liters of fluid per hour. A scheduled shipment runs continuously for 2.5 hours. Note: 1000 liters equals 1 cubic meter.
+
+Decision rule:
+If the total volume transported is greater than 10 cubic meters, report the receiving port: Rotterdam.
+Otherwise, report the total volume in liters.
+
+Question: What should be reported?
+Date: Sep 07, 2020 || User: 1432 || Instance: A test track recorded these lap times:
+- Helios 3: 12.4 seconds
+- Vega Prime: 11.9 seconds
+- Orion X: 12.1 seconds
+- Sirius II: 11.7 seconds
+
+Decision rule:
+If the fastest car finished in under 11.8 seconds, report that car model.
+Otherwise, report the slowest lap time in seconds.
+
+Question: What should be reported?
+Date: Apr 18, 2013 || User: 1701 || Instance: A factory needs 240 widgets to fulfill an outgoing shipment. Current stock is 198 widgets. An additional 50 widgets are in transit but will arrive in 3 days. The shipment is due in 2 days.
+
+Decision rule:
+If the shortfall (widgets needed minus widgets available in time) is greater than 30, report the concept "supply shortage".
+Otherwise, report the city of origin: Hamburg.
+
+Question: What should be reported?
+Date: Jul 25, 2024 || User: 1967 || Instance: Three monitoring stations recorded events last quarter:
+- Station A (Nairobi): 12 events
+- Station B (Quito): 27 events
+- Station C (Wellington): 19 events
+
+Decision rule:
+Report the city of the station that recorded the most events.
+If two or more stations are tied for the most, report the concept "data parity".
+
+Question: What should be reported?
+Date: Dec 03, 2016 || User: 1148 || Instance: An award registry lists the following winners:
+- 2014: Aaron Park
+- 2015: Beatriz Lima
+- 2016: Chen Wei
+- 2017: Dmitri Volkov
+
+Decision rule:
+If the 2016 winner's first name starts with a letter strictly before 'F' in the alphabet, report that winner.
+Otherwise, report the concept "unknown laureate".
+
+Question: What should be reported?
+Date: Feb 19, 2021 || User: 1820 || Instance: A solar farm has 47 panels. Each panel produces 1.2 MWh per month on average. The farm has been operating for 6 full months.
+
+Decision rule:
+If the total production exceeds 350 MWh, report the grid operator code: ENTSO.
+Otherwise, report the total production in MWh.
+
+Question: What should be reported?
+Date: Jun 10, 2018 || User: 1295 || Instance: Three datasets list ISO country codes:
+- Dataset 1: DEU, FRA, ITA, ESP
+- Dataset 2: FRA, ESP, PRT, NLD
+- Dataset 3: ESP, FRA, BEL, AUT
+
+Decision rule:
+If exactly one country code appears in all three datasets, report that code.
+If more than one code appears in all three, report the alphabetically first such code.
+If none appears in all three, report the concept "no overlap".
+
+Question: What should be reported?
+Date: Oct 14, 2023 || User: 1612 || Instance: A research craft launched on 2023-04-10 and returned exactly 50 days after launch.
+
+Decision rule:
+If the return date falls in May, report the craft model: Aurora-9.
+Otherwise, report the name of the return month.
+
+Question: What should be reported?
+Date: May 23, 2014 || User: 1108 || Instance: A factory reports the following emissions readings against regulatory limits:
+- NO2: 47 ppb (limit 40 ppb)
+- Particulates: 28 ug/m3 (limit 35 ug/m3)
+- CO: 9 ppm (limit 10 ppm)
+
+Decision rule:
+If exactly one pollutant exceeds its limit, report the concept "regulatory violation".
+If two or more exceed their limits, report the concept "compliance failure".
+If none exceed their limits, report the city of the facility: Bilbao.
+
+Question: What should be reported?
+Date: Jan 08, 2025 || User: 1543 || Instance: Three regional branches reported Q4 revenue:
+- Madrid: 4.8 million euros
+- Vienna: 5.2 million euros
+- Oslo: 4.9 million euros
+
+Decision rule:
+If the top branch's revenue exceeds 5.0 million euros, report that branch's city.
+Otherwise, report the regional accounting code: EUR-N.
+
+Question: What should be reported?
+Date: Aug 15, 2012 || User: 1789 || Instance: A recipe is being scaled up by a factor of 3.5. The original recipe calls for 240 grams of flour. The cook has 900 grams of flour available.
+
+Decision rule:
+If the leftover flour after baking is at least 50 grams, report the leftover amount in grams.
+Otherwise, report the concept "insufficient surplus".
+
+Question: What should be reported?
+Date: Dec 29, 2019 || User: 1924 || Instance: A patent register lists the following entries:
+- Patent #4471 by Hedy Lamarr (1942)
+- Patent #5012 by Nikola Tesla (1888)
+- Patent #7203 by Stephanie Kwolek (1965)
+- Patent #8801 by Hedy Lamarr (1947)
+
+Decision rule:
+If exactly one inventor appears on more than one patent in the list, report that inventor.
+Otherwise, report the concept "register ambiguity".
+
+Question: What should be reported?
+Date: Apr 22, 2015 || User: 1612 || Instance: A factory has 12 production lines. Each line produces 45 units per hour. All lines were scheduled to run 8 hours, but 3 lines were down for the entire day.
+
+Decision rule:
+If the total number of units produced is less than 4000, report that number of units.
+Otherwise, report the floor supervisor: Hiroshi Tanaka.
+
+Question: What should be reported?
+Date: Aug 30, 2019 || User: 1085 || Instance: A package was dispatched on March 3, 2019 with an estimated delivery time of 14 days. Tracking later confirmed the package actually arrived 5 days later than the original estimate.
+
+Decision rule:
+If the actual delivery date falls within March, report the origin warehouse city: Rotterdam.
+Otherwise, report the total transit time in days.
+
+Question: What should be reported?
+Date: Jan 15, 2022 || User: 1239 || Instance: Quarterly sales totals for one regional team:
+- Q1: Diana Reyes — $48,000
+- Q2: Marcus Chen — $52,500
+- Q3: Diana Reyes — $61,200
+- Q4: Priya Singh — $44,800
+
+Decision rule:
+If the highest single-quarter total exceeds $60,000, report the salesperson who achieved that quarter.
+Otherwise, report the reporting period abbreviation: YTD.
+
+Question: What should be reported?
+Date: Jun 09, 2017 || User: 1924 || Instance: A pipeline carries 240 gallons per minute. (1 gallon ≈ 3.785 liters.)
+
+Decision rule:
+If the flow rate exceeds 50,000 liters per hour, report the regulatory body code: EPA.
+Otherwise, report the operating city: Houston.
+
+Question: What should be reported?
+Date: Oct 11, 2020 || User: 1459 || Instance: Three incident reports list the root causes contributing to a project delay:
+- Report A: power outage, software bug, supply shortage
+- Report B: software bug, supply shortage, weather delay
+- Report C: supply shortage, hardware fault, vendor failure
+
+Decision rule:
+If exactly one root cause appears in all three reports, report that cause.
+If two or more causes appear in all three reports, report the project lead: Aaron Voss.
+
+Question: What should be reported?
+Date: May 27, 2023 || User: 1390 || Instance: A launch services review ranks four candidate vehicles by payload-to-low-Earth-orbit capacity:
+- Falcon Heavy: 63,800 kg
+- New Glenn: 45,000 kg
+- Ariane 6: 21,650 kg
+- Vulcan Centaur: 27,200 kg
+
+Decision rule:
+If the second-highest capacity is greater than 40,000 kg, report the vehicle that has the second-highest capacity.
+Otherwise, report the agency abbreviation: ESA.
+
+Question: What should be reported?
+Date: Sep 04, 2014 || User: 1239 || Instance: A bakery offers a 15% discount on any order whose pre-discount subtotal is greater than $80. A customer orders 7 cakes at $12.00 each and 4 pastries at $3.00 each.
+
+Decision rule:
+If the discount applies, report the final amount actually paid.
+Otherwise, report the bakery's district: Montmartre.
+
+Question: What should be reported?
+Date: Nov 18, 2016 || User: 1034 || Instance: Three clues describe a single American mathematician:
+- She co-authored a 1959 NASA Langley report on equations for the trajectory of an orbital spacecraft.
+- She received the Presidential Medal of Freedom in 2015.
+- Her career was a central subject of the 2016 film "Hidden Figures."
+
+Decision rule:
+If all three clues uniquely identify a single individual, report that individual.
+Otherwise, report the concept: identification ambiguity.
+
+Question: What should be reported?
+Date: Mar 07, 2025 || User: 1000 || Instance: A flight departs Singapore at 23:50 local time on March 7, 2025. The scheduled flight duration is 13 hours 25 minutes. The destination's local time zone is exactly 8 hours behind Singapore's.
+
+Decision rule:
+If the local arrival time at the destination is before 12:00 noon, report the destination city: London.
+Otherwise, report the flight number: BA12.
+
+Question: What should be reported?
+Date: Jul 21, 2013 || User: 1300 || Instance: A virology lab tested three patient samples for antibodies against several viruses:
+- Sample 1: HIV, HPV, EBV
+- Sample 2: HPV, HSV, EBV
+- Sample 3: HPV, HSV, HBV
+
+Decision rule:
+If exactly one virus is present in all three samples, report that virus.
+If two or more viruses are present in all three samples, report the description: co-occurrence pattern.
+
+Question: What should be reported?
+Date: Aug 22, 2014 || User: 1274 || Instance: A robotics team prepares power packs for a scrimmage.
+There are 9 robots, and each robot needs 4 packs.
+The team also brings 11 spare packs.
+During testing, 8 packs fail inspection.
+
+Decision rule:
+If the number of usable packs is divisible by 3, report the lab code: RPA.
+Otherwise, report the number of usable packs.
+
+Question: What should be reported?
+Date: May 17, 2022 || User: 1091 || Instance: A bakery starts with 2.4 kilograms of flour.
+Each batch of rolls uses 350 grams of flour.
+The bakery makes 6 batches.
+
+Decision rule:
+If at least 250 grams of flour remain, report the delivery city: Mendoza.
+Otherwise, report the number of grams remaining.
+
+Question: What should be reported?
+Date: Jan 04, 2019 || User: 1462 || Instance: A museum puzzle assigns point values to scanned color tags:
+- blue tag = 3 points
+- amber tag = 5 points
+- violet tag = 8 points
+
+A visitor scans one blue tag, one amber tag, and one violet tag.
+
+Decision rule:
+If the total score is prime, report the artifact name: Astrolabe 7.
+Otherwise, report the curator: Maya Lin.
+
+Question: What should be reported?
+Date: Nov 09, 2026 || User: 1338 || Instance: Three drone teams submit approved landing zones:
+- Team North: pier, observatory, quarry, orchard
+- Team East: orchard, pier, tunnel, greenhouse
+- Team West: pier, orchard, archive, depot
+
+Decision rule:
+If exactly two landing zones appear on all three lists, report the concept: route convergence.
+Otherwise, report the shared landing zone count.
+
+Question: What should be reported?
+Date: Dec 30, 2011 || User: 1186 || Instance: A night ferry leaves Harbor A at 21:45 and arrives at Harbor B at 01:10 the next day.
+
+Decision rule:
+If the trip lasted less than 200 minutes, report the port city: Tallinn.
+Otherwise, report the trip duration in minutes.
+
+Question: What should be reported?
+Date: Jul 03, 2024 || User: 1407 || Instance: A warehouse uses this routing table:
+- If the final crate count is 0 to 20, route to Bay Gull
+- If the final crate count is 21 to 40, route to Bay Kestrel
+- If the final crate count is 41 to 60, route to Bay Heron
+
+A truck unloads 14 crates, then 19 crates, then removes 7 damaged crates.
+
+Decision rule:
+If the route is Bay Kestrel, report the equipment model: Lifter-9.
+Otherwise, report the route name.
+
+Question: What should be reported?
+Date: Mar 15, 2017 || User: 1029 || Instance: A classroom scoreboard begins at 48 points.
+Team A earns three 7-point bonuses.
+Then a penalty removes 10 points.
+
+Decision rule:
+If the final score is exactly 59, report the student captain: Priya Nair.
+Otherwise, report the abbreviation: TQC.
+
+Question: What should be reported?
+Date: Oct 28, 2020 || User: 1495 || Instance: A theater has four rehearsal blocks:
+- Block A: 35 minutes
+- Block B: 50 minutes
+- Block C: 45 minutes
+- Block D: 40 minutes
+
+The director schedules blocks B, D, and A in that order.
+
+Decision rule:
+If the scheduled rehearsal time is more than 120 minutes, report the festival abbreviation: NFF.
+Otherwise, report the scheduled rehearsal time.
+
+Question: What should be reported?
+Date: Jun 06, 2013 || User: 1218 || Instance: A field station records temperatures at three checkpoints:
+- dawn: 11°C
+- noon: 24°C
+- dusk: 17°C
+
+A sensor flag is triggered when the range between the highest and lowest reading is greater than 10°C.
+
+Decision rule:
+If the sensor flag is triggered, report the base location: Ushuaia.
+Otherwise, report the temperature range.
+
+Question: What should be reported?
+Date: Feb 18, 2025 || User: 1143 || Instance: A puzzle box opens after three dials are set.
+The rule says to multiply the first two dial values, then subtract the third.
+The dial values are:
+- first dial: 6
+- second dial: 9
+- third dial: 14
+
+Decision rule:
+If the result is at least 40, report the spacecraft name: Horizon Kite.
+Otherwise, report the result.
+
+Question: What should be reported?
+Date: Aug 22, 2014 || User: 1187 || Instance: A bakery prepares 24 batches of cookies. Each batch yields 18 cookies. They sell 312 cookies and donate 47 to a shelter.
+
+Decision rule:
+If the number of cookies remaining is at least 60, report the number remaining.
+Otherwise, report the bakery's nickname: Sugar Atelier.
+
+Question: What should be reported?
+Date: Apr 11, 2019 || User: 1356 || Instance: A cargo ship departs Rotterdam on March 3, 2019, and arrives at its destination port on March 28, 2019.
+
+Decision rule:
+If the voyage took fewer than 28 days, report the destination port: Singapore.
+Otherwise, report the shipping line abbreviation: MSC.
+
+Question: What should be reported?
+Date: Sep 30, 2022 || User: 1089 || Instance: Three research papers list these co-authors:
+- Paper X: Rosalind Franklin, Jonas Salk, Barbara McClintock, Linus Pauling
+- Paper Y: Jonas Salk, Marie Curie, Niels Bohr, Rosalind Franklin
+- Paper Z: Linus Pauling, Barbara McClintock, Niels Bohr, Jonas Salk
+
+Decision rule:
+If exactly one person appears on all three papers, report that person.
+Otherwise, report the concept "authorship overlap".
+
+Question: What should be reported?
+Date: Jul 08, 2016 || User: 1422 || Instance: Four agencies co-funded a project:
+- Agency P contributed $4.2M (National Science Foundation)
+- Agency Q contributed $3.8M (European Research Council)
+- Agency R contributed $5.6M (Defense Advanced Research Projects Agency)
+- Agency S contributed $2.1M (Wellcome Trust)
+
+Decision rule:
+If the largest single contribution exceeds $5M, report the abbreviation of the agency that gave it.
+Otherwise, report the project's headquarters city: Geneva.
+
+Question: What should be reported?
+Date: Dec 02, 2013 || User: 1255 || Instance: A museum has four spacecraft exhibits with these features:
+- Exhibit 1: launched 1977, now beyond the heliopause
+- Exhibit 2: launched 1990, orbits Earth, optical telescope
+- Exhibit 3: launched 2011, rover operating on the Martian surface
+- Exhibit 4: launched 1969, carried the first humans to the lunar surface
+
+Decision rule:
+If exactly one exhibit was launched after the year 2000 AND its operating location is not Earth orbit, report that spacecraft's name.
+Otherwise, report the curator's name: Helena Voss.
+
+Question: What should be reported?
+Date: May 17, 2020 || User: 1101 || Instance: A factory recorded its quarterly output for one year:
+- Q1: 1200 units
+- Q2: 1180 units
+- Q3: 1150 units
+- Q4: 1090 units
+
+Decision rule:
+If the output strictly decreases every quarter, report the underlying issue: production decline.
+If the output is highest in Q4, report the plant location: Osaka.
+Otherwise, report the plant manager's surname: Tanaka.
+
+Question: What should be reported?
+Date: Mar 14, 2017 || User: 1480 || Instance: A surveyor measured three segments of a property boundary:
+- Segment 1: 4500 meters
+- Segment 2: 3.2 kilometers
+- Segment 3: 2750 meters
+
+Decision rule:
+If the total boundary length exceeds 10 kilometers, report the total length in kilometers.
+Otherwise, report the surveying firm's abbreviation: NSPS.
+
+Question: What should be reported?
+Date: Jan 26, 2025 || User: 1167 || Instance: A logistics network shipped these package volumes on Tuesday:
+- Hub Alpha (Memphis): 1240 packages
+- Hub Beta (Louisville): 980 packages
+- Hub Gamma (Indianapolis): 1560 packages
+
+Decision rule:
+If the median hub volume falls strictly between 1000 and 1500, report the city of the median hub.
+Otherwise, report the term "load imbalance".
+
+Question: What should be reported?
+Date: Oct 19, 2011 || User: 1334 || Instance: An orchestra concert featured solos on three instruments described only as:
+- a stringed instrument tuned in fifths with four strings, played upright between the knees
+- a metal instrument played by extending a movable U-shaped slide
+- a tall wooden double-reed instrument with a folded body and a curved metal bocal
+
+Decision rule:
+If exactly one of the three solos is from the brass family, report that brass instrument by name.
+Otherwise, report the conductor's surname: Mehta.
+
+Question: What should be reported?
+Date: Jun 08, 2023 || User: 1278 || Instance: A regional electric grid recorded these voltage-sag incidents during one week:
+- Monday: substation 4
+- Wednesday: substation 7
+- Thursday: substation 4
+- Saturday: substation 11
+
+Decision rule:
+If at least three distinct substations were affected AND the total number of incidents exceeds 3, report the underlying phenomenon: grid instability.
+If only one substation was affected repeatedly, report that substation's town: Reading.
+Otherwise, report the regional operator code: PJM.
+
+Question: What should be reported?
+Date: Apr 11, 2016 || User: 1426 || Instance: A studio keeps a prop checkout log:
+- Monday: red mask, brass compass, paper crane
+- Wednesday: brass compass, glass apple, red mask
+- Friday: brass compass, paper crane, glass apple
+
+Decision rule:
+If exactly one prop appears in all three checkout lists, report that prop name.
+Otherwise, report the abbreviation: MISC.
+
+Question: What should be reported?
+Date: Sep 02, 2023 || User: 1048 || Instance: A clinic follows this callback rule:
+- If a form is received on Monday, Tuesday, or Wednesday, the callback is 2 business days later.
+- If a form is received on Thursday or Friday, the callback is the next Monday.
+
+A form is received on Wednesday.
+
+Decision rule:
+If the callback day is Friday, report the physician: Elena Park.
+Otherwise, report the callback day.
+
+Question: What should be reported?
+Date: Jan 19, 2012 || User: 1193 || Instance: A puzzle manual gives this symbol table:
+- crescent = north
+- triangle = west
+- square = east
+- circle = south
+
+A player reads the sequence: triangle, square, crescent.
+Cancel any opposite-direction pair that appears anywhere in the sequence.
+
+Decision rule:
+If exactly one direction remains after cancellation, report the location: Alaska.
+Otherwise, report the concept: directional conflict.
+
+Question: What should be reported?
+Date: Jun 27, 2020 || User: 1365 || Instance: A badge printer uses these rules:
+- Names beginning with A through H receive blue badges.
+- Names beginning with I through Q receive silver badges.
+- Names beginning with R through Z receive green badges.
+
+The submitted names are Noor, Rafael, and Hana.
+A badge color qualifies only if at least two submitted names receive that same color.
+
+Decision rule:
+If a badge color qualifies, report the concept: cohort match.
+Otherwise, report the abbreviation: NBC.
+
+Question: What should be reported?
+Date: Dec 08, 2018 || User: 1017 || Instance: A ferry reservation uses this priority order:
+1. medical cargo
+2. refrigerated cargo
+3. mail cargo
+4. standard luggage
+
+The manifest contains standard luggage, refrigerated cargo, and mail cargo.
+
+Decision rule:
+If the highest-priority item present is refrigerated cargo, report the island city: Visby.
+Otherwise, report the highest-priority item present.
+
+Question: What should be reported?
+Date: Oct 13, 2025 || User: 1491 || Instance: A translation game uses this lookup table:
+- lune means moon
+- etoile means star
+- pont means bridge
+- arbre means tree
+
+The clue says: report the English word for the French word that alphabetically comes first among lune, etoile, and pont.
+
+Decision rule:
+If the English word is star, report the observatory name: Meridian Array.
+Otherwise, report the English word.
+
+Question: What should be reported?
+Date: May 24, 2015 || User: 1232 || Instance: A festival seating chart lists performers by stage:
+- Stage 1: Imani Cole, Theo Marsh, Lina Ortiz
+- Stage 2: Theo Marsh, Omar Vale, Imani Cole
+- Stage 3: Lina Ortiz, Imani Cole, Nia Brooks
+
+Decision rule:
+If exactly one performer appears on all three stages, report that performer.
+Otherwise, report the concept: schedule overlap.
+
+Question: What should be reported?
+Date: Mar 31, 2021 || User: 1109 || Instance: A librarian files books using this rule:
+- If a title has more vowels than consonants, place it on the Echo shelf.
+- If a title has more consonants than vowels, place it on the Stone shelf.
+- If they are equal, place it on the Balance shelf.
+
+The title to file is "Orion". Count only letters A, E, I, O, and U as vowels.
+
+Decision rule:
+If the book goes on the Echo shelf, report the shelf code: ESF.
+Otherwise, report the shelf name.
+
+Question: What should be reported?
+Date: Sep 16, 2010 || User: 1384 || Instance: A route card says:
+Start at Cedar Gate.
+Move to the station whose name starts with the last letter of your current station:
+- Cedar Gate connects to Ember Dock
+- Ember Dock connects to Kestrel Yard
+- Kestrel Yard connects to Delta Pier
+
+After making exactly two moves, stop.
+
+Decision rule:
+If the stopping station is Kestrel Yard, report the concept: chain routing.
+Otherwise, report the stopping station.
+
+Question: What should be reported?
+Date: Feb 05, 2026 || User: 1306 || Instance: A lab labels samples by the median of three ranked signals.
+The signal strengths are:
+- cobalt = 14
+- amber = 21
+- ivory = 17
+
+The sample label is the color with the median signal strength.
+
+Decision rule:
+If the sample label is ivory, report the signal value.
+Otherwise, report the sample label.
+
+Question: What should be reported?
