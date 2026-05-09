@@ -196,3 +196,35 @@ Run all benchmark tasks against OpenRouter:
 ```bash
 python recursive-bench/run_recursive_bench.py --model-name openai/gpt-5.4-mini
 ```
+
+Run one benchmark task:
+
+```bash
+python recursive-bench/run_recursive_bench.py \
+  --task task_03 \
+  --max-depth 2 \
+  --output results/task_03_d2.txt
+```
+
+Useful flags:
+
+- `records`: Optional positional path to the synthetic records file. Defaults to `synthetic_user_records.json`.
+- `--task task_03`: Run a single task. Repeat the flag to run multiple tasks, for example `--task task_03 --task task_04`. Omit it to run all tasks once.
+- `--max-depth 2`: Set the RLM recursion depth for a normal run. Defaults to `1`.
+- `--model-name openai/gpt-5.5`: Set the root RLM model used through OpenRouter.
+- `--sub-model-name openai/gpt-5.5`: Set the model used for `llm_query`, child RLMs, and max-depth fallback calls.
+- `--max-iterations 30`: Set the RLM iteration budget.
+- `--depth2-system-prompt recursive-bench/prompts/rlm_system_prompt_depth2.txt`: Override the system prompt used for depth-2 runs.
+- `--dry-run`: Build and score the task rows without making model calls.
+- `--output results/task_03_d2.txt`: Write the tab-separated results report to a specific file. If omitted, the runner writes `results/results_HHMMSS.txt`.
+- `--full-run`: Run the full benchmark twice, once at max depth 1 and once at max depth 2. Do not combine this with `--task`.
+
+Run the full benchmark:
+
+```bash
+python recursive-bench/run_recursive_bench.py \
+  --full-run \
+  --model-name openai/gpt-5.5 \
+  --sub-model-name openai/gpt-5.5 \
+  --output results/full_bench_d1_d2.txt
+```
